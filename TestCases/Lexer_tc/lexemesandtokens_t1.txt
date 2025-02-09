@@ -89,14 +89,14 @@ Line no. 8	 Lexeme ~	 	Token TK_NOT
 Line No 8: Error :Variable Identifier is longer than the prescribed length of 20 characters.
 Line no. 8	 Lexeme ~	 	Token TK_NOT
 Line no. 8	 Lexeme ;	 	Token TK_SEM
-Line no: 9 : Error: Unknown pattern <5000.7>
+Line no: 9 : Error: Unknown pattern <5000.7> // YE KYA HAI BC
 Line no. 9	 Lexeme +	 	Token TK_PLUS
 Line no. 9	 Lexeme 2543.23E45	Token TK_RNUM
 Line no. 9	 Lexeme -	 	Token TK_MINUS
 Line no. 9	 Lexeme 432	 	Token TK_NUM
 Line no. 9	 Lexeme +	 	Token TK_PLUS
 Line no. 9	 Lexeme 343333.55E-12	Token TK_RNUM
-Line no. 9	 Lexeme 4		Token TK_NUM
+Line no. 9	 Lexeme 4		Token TK_NUM // YE KYA HAI BC
 Line no. 9	 Lexeme ;	 	Token TK_SEM
 Line No 10 : Error: Unknown Symbol <$>
 Line no. 10	 Lexeme real	 	Token TK_REAL

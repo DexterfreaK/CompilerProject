@@ -299,6 +299,7 @@ void closeLexer()
     3) [0-9]+ "." [0-9]+ (E|e) [ + | - | ε ] [0-9]+ -> TK_RNUM
 */
 
+// 5000.7 bt
 Token handleNumericLiteral(char firstChar)
 {
     Token token;
@@ -554,35 +555,113 @@ Token handleFunctionID(char firstChar)
         }
     }
 
+
     // Finalize token
     token.lexeme[lexPos] = '\0';
     token.type = TK_FUNID;
     token.lineNo = lineNo;
+    
+    // Look up in keyword table
+    TokenType ttype = lookupKeyword(token.lexeme);
+    if (ttype != TK_ID)
+    {
+        token.type = ttype;
+    }
 
     return token;
 }
 
-Token handleAlphaLine(char firstChar){
+Token handleAlpha(char firstChar)
+{
     Token token;
-    int lexPos = 0;
-    char c = firstChar;
+    int pos = 0;
+    token.lexeme[pos++] = firstChar;
 
-    // We already know firstChar is alpha
-    token.lexeme[lexPos++] = c; // store alpha
+    // 1) Check for [b-d] followed by [2-7]
+    //    If yes, parse TK_ID of the form: [b-d][2-7][b-d]*[2-7]*
+    if (firstChar >= 'b' && firstChar <= 'd')
+    {
+        char c = getNextCharFromBuffer();
+        if (c >= '2' && c <= '7')
+        {
+            // We have matched [b-d][2-7]
+            token.lexeme[pos++] = c;
 
-    if(c>=b && c<=d){
+            // Read zero or more letters in [b-d]
+            while (true)
+            {
+                c = getNextCharFromBuffer();
+                if (c >= 'b' && c <= 'd')
+                {
+                    token.lexeme[pos++] = c;
+                }
+                else
+                {
+                    retract(1);
+                    break;
+                }
+            }
 
-        c = getNextCharFromBuffer();
+            // Read zero or more digits in [2-7]
+            while (true)
+            {
+                c = getNextCharFromBuffer();
+                if (c >= '2' && c <= '7')
+                {
+                    token.lexeme[pos++] = c;
+                }
+                else
+                {
+                    retract(1);
+                    break;
+                }
+            }
 
+            // Done with TK_ID
+            token.lexeme[pos] = '\0';
+            token.type = TK_ID;
+            token.lineNo = lineNo;
+            return token;
+        }
+        else
+        {
+            // Not [2-7]—so retract and fall back to plain letter token
+            retract(1);
+        }
     }
 
+    // 2) Otherwise, parse a plain letter sequence [a-z]+
+    //    Then lookup in the keyword table; if not found, it's TK_FIELDID
+    while (true)
+    {
+        char c = getNextCharFromBuffer();
+        if (c >= 'a' && c <= 'z')
+        {
+            token.lexeme[pos++] = c;
+        }
+        else
+        {
+            // not a letter, so retract it
+            retract(1);
+            break;
+        }
+    }
+    token.lexeme[pos] = '\0';
 
+    // Look up in keyword table
+    TokenType ttype = lookupKeyword(token.lexeme);
+    if (ttype != TK_ID) // TK_ID is default lookup value
+    {
+        // It's a known keyword
+        token.type = ttype;
+    }
+    else
+    {
+        // Otherwise, treat as TK_FIELDID
+        token.type = TK_FIELDID;
+    }
 
-    // Finalize token
-    token.lexeme[lexPos] = '\0';
-    token.type = TK_FUNID;
     token.lineNo = lineNo;
-
     return token;
 }
 
@@ -621,28 +700,30 @@ Token getToken()
     if (isalpha((unsigned char)c) )
     {
         // collect alphanumeric (and underscore) to form an identifier or keyword
-        token.lexeme[lexPos++] = c;
+        // token.lexeme[lexPos++] = c;
 
-        while (1)
-        {
-            c = getNextCharFromBuffer();
-            if (isalnum((unsigned char)c))
-            {
-                token.lexeme[lexPos++] = c;
-            }
-            else
-            {
-                // we've gone one char too far
-                retract(1);
-                break;
-            }
-        }
-        token.lexeme[lexPos] = '\0';
+        // while (1)
+        // {
+        //     c = getNextCharFromBuffer();
+        //     if (isalnum((unsigned char)c))
+        //     {
+        //         token.lexeme[lexPos++] = c;
+        //     }
+        //     else
+        //     {
+        //         // we've gone one char too far
+        //         retract(1);
+        //         break;
+        //     }
+        // }
+        // token.lexeme[lexPos] = '\0';
 
-        // now do keyword lookup
-        token.type = lookupKeyword(token.lexeme);
-        token.lineNo = lineNo;
-        return token;
+        // // now do keyword lookup
+        // token.type = lookupKeyword(token.lexeme);
+        // token.lineNo = lineNo;
+        // return token;
+
+        return handleAlpha(c);
     }
 
     // Example handle of a numeric literal
