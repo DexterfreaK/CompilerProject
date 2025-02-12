@@ -67,6 +67,16 @@ const char *TokenStr[] = {
     "TK_COMMENT",
     "TK_ERR"};
 
+    // Function to convert enum to string
+const char *getTokenStr(TokenType t)
+{
+    if (t >= TK_MINUS && t <= TK_ERR)
+    {
+        return TokenStr[t];
+    }
+    return "UNKNOWN_TOKEN";
+}
+
 twinBuffer *createTwinBuffer(FILE *source, int bufSize)
 {
     if (!source || bufSize <= 0)
@@ -687,7 +697,7 @@ void id_fun(Token *token)
         token->type = TK_FUNID;
     }
 }
-int doStateActions(Token *token, int state)
+void doStateActions(Token *token, int state)
 {
     switch (state)
     {
@@ -708,7 +718,8 @@ int doStateActions(Token *token, int state)
         break;
     case 9:
         lineNo++;
-        return CONTINUE;
+        token->cat = CONTINUE;
+        return;
     case 12:
         token->type = TK_OR;
         break;
@@ -805,28 +816,23 @@ int doStateActions(Token *token, int state)
 
     case 3:
         // EOF token
-        return EXIT;
+        token->cat = EXIT;
+        return;
     case 28:
         // Whitespace token – do not return a token.
-        return CONTINUE;
+        token->cat = CONTINUE;
+        return;
 
     default:
         token->type = TK_ERR;
+        token->cat = ERROR;
         break;
     }
-    return NORMAL;
-}
-// Function to convert enum to string
-const char *getTokenStr(TokenType t)
-{
-    if (t >= TK_MINUS && t <= TK_ERR)
-    {
-        return TokenStr[t];
-    }
-    return "UNKNOWN_TOKEN";
+
+    return;
 }
 
-int newGetToken(twinBuffer *B, Token *token, int pos)
+void newGetToken(twinBuffer *B, Token *token, int pos)
 {
     char ch = getNextCharFromBuffer(B);
     int nextState = getState(ch, current_s);
@@ -843,16 +849,24 @@ int newGetToken(twinBuffer *B, Token *token, int pos)
             token->lexeme[pos] = ch;
             token->lexeme[++pos] = '\0';
         }
-        return NORMAL;
+
+        token->cat = NORMAL;
+        return;
     }
 
     int stateDetail = getStateDetails(B, nextState);
 
     // only add to lexeme if not in final retract state
-    if (stateDetail != FINAL_RETRACTONCE && stateDetail != FINAL_RETRACTTWICE)
+    if (!(current_s == 1 && pos >= 1))
+        if (stateDetail != FINAL_RETRACTONCE && stateDetail != FINAL_RETRACTTWICE)
+        {
+            token->lexeme[pos] = ch;
+            token->lexeme[++pos] = '\0';
+        }
+    
+    if(stateDetail == FINAL_RETRACTTWICE)
     {
-        token->lexeme[pos] = ch;
-        token->lexeme[++pos] = '\0';
+        token->lexeme[pos - 1] = '\0';
     }
 
     if (stateDetail != NON_FINAL)
@@ -860,18 +874,19 @@ int newGetToken(twinBuffer *B, Token *token, int pos)
 
         if (pos >= LENGTHLEXEME)
         {
-            return LENGTHEXCEEDED;
+            token->cat = LENGTHEXCEEDED;
+            return;
         }
 
-        int do_state_actions = doStateActions(token, nextState);
+        doStateActions(token, nextState);
         // printf("Line no:%d sd=%d , type = %s , STATE : %d, l = %s\n", lineNo, stateDetail, getTokenStr(token->type), nextState, token->lexeme);
-        return do_state_actions;
+        return;
     }
 
     else
     {
         current_s = nextState;
-        return newGetToken(B, token, pos);
+        newGetToken(B, token, pos);
     }
 }
 
@@ -882,7 +897,11 @@ int printToken(Token *t)
     {
         return -1;
     }
-    if (t->type == TK_ERR)
+    if (t->cat == LENGTHEXCEEDED)
+    {
+        printf("Line no. %d\t Error: Variable Identifier is longer than the prescribed length of %d characters\n", t->lineNo, LENGTHLEXEME);
+    }
+    else if (t->type == TK_ERR)
     {
         printf("Line no. %d\t Error: Unknown pattern <%s> \n", t->lineNo, t->lexeme);
     }
@@ -922,21 +941,61 @@ void driverToken(char *fn)
         t.lexeme[0] = '\0';
         t.lineNo = lineNo;
         t.type = TK_ERR;
+        t.cat = NORMAL;
 
-        int x = newGetToken(B, &t, 0);
+        newGetToken(B, &t, 0);
 
         current_s = 0;
-        if (x == EXIT)
+        if (t.cat == EXIT)
         {
             break;
         }
-        if (x == CONTINUE)
+        if (t.cat == CONTINUE)
         {
             continue;
         }
-
         printToken(&t);
     }
     destroyTwinBuffer(B);
+    fclose(fp);
+}
+
+/**
+ * Removes all text starting from '%' until the end of the line.
+ * The result is printed to standard output.
+ */
+
+void removeComments(const char *fn)
+{
+    FILE *fp = fopen(fn, "r");
+    if (fp == NULL)
+    {
+        fprintf(stderr, "Error: Unable to open file '%s'\n", fn);
+        exit(EXIT_FAILURE);
+    }
+
+    int ch;
+    while ((ch = fgetc(fp)) != EOF)
+    {
+        // If we encounter '%', skip everything until the next newline or EOF
+        if (ch == '%')
+        {
+            while ((ch = fgetc(fp)) != EOF && ch != '\n')
+            {
+                // do nothing, just skip
+            }
+            // If we found a newline, print it to keep the line separation
+            if (ch == '\n')
+            {
+                putchar(ch);
+            }
+        }
+        else
+        {
+            // If it's not '%', simply print the character
+            putchar(ch);
+        }
+    }
+
     fclose(fp);
 }

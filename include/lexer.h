@@ -9,7 +9,7 @@
 
 /* Macros */
 #define TRAP_STATE -1
-#define LENGTHLEXEME 50
+#define LENGTHLEXEME 22
 #define EOF_SENTINEL '\0'
 
 /*-------------------
@@ -95,11 +95,25 @@ typedef enum
 } StateDetail;
 
 /*-------------------
+   Invalid Token Enum
+  -------------------*/
+typedef enum
+{
+  EXIT,
+  CONTINUE,
+  LENGTHEXCEEDED,
+  NORMAL,
+  ERROR,
+
+} TokenCategory;
+
+/*-------------------
    Token Structure
   -------------------*/
 typedef struct
 {
     TokenType type;
+    TokenCategory cat;
     char lexeme[100]; // Actual lexeme
     int lineNo;       // Line number in source file
 } Token;
@@ -119,17 +133,6 @@ typedef struct
     int current_s;      // Current state (if maintained here)
 } twinBuffer;
 
-/*-------------------
-   Invalid Token Enum
-  -------------------*/
-typedef enum
-{
-    EXIT,
-    CONTINUE,
-    LENGTHEXCEEDED,
-    NORMAL,
-
-} TokenCategory;
 
 /*-------------------
    Function Prototypes
@@ -147,12 +150,15 @@ int getStateDetails(twinBuffer *B, int state);
 TokenType lookupKeyword(const char *lex);
 void token_fun(Token *token);
 void id_fun(Token *token);
-int doStateActions(Token *token, int state);
+void doStateActions(Token *token, int state);
 const char *getTokenStr(TokenType t);
-int newGetToken(twinBuffer *B, Token *token, int pos);
+void newGetToken(twinBuffer *B, Token *token, int pos);
 int printToken(Token *t);
 
 /* Driver function */
 void driverToken(char *fn);
+
+/* Utility functions */
+void removeComments(const char *fn);
 
 #endif /* LEXER_H */

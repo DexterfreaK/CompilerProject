@@ -41,7 +41,7 @@ Line no. 6	 Lexeme c4bbb	 	Token TK_ID
 Line no. 6	 Lexeme <	 	Token TK_LT
 Line no. 6	 Lexeme <=	 	Token TK_LE
 Line no. 6	 Lexeme <=	 	Token TK_LE
-Line No 6: Error : Unknown Symbol <=> //YE KYA HAI NC
+Line No 6: Error : Unknown Symbol <=>
 Line no. 6	 Lexeme <---	 	Token TK_ASSIGNOP
 Line no. 6	 Lexeme (	 	Token TK_OP
 Line no. 6	 Lexeme d4cbcd5677	Token TK_ID
