@@ -3,85 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#define TRAP_STATE -1
-#define LENGTHLEXEME 50
-//-------------------
-// Token Types
-//-------------------
-// order should be strictly same as the order of the tokens in the enum
-typedef enum
-{
-    TK_MINUS,
-    TK_IF,
-    TK_DIV,
-    TK_CALL,
-    TK_WITH,
-    TK_MAIN,
-    TK_ENDWHILE,
-    TK_TYPE,
-    TK_ELSE,
-    TK_INT,
-    TK_NOT,
-    TK_GT,
-    TK_PARAMETERS,
-    TK_THEN,
-    TK_SEM,
-    TK_RETURN,
-    TK_ID,
-    TK_DEFINETYPE,
-    TK_OP,
-    TK_WHILE,
-    TK_OR,
-    TK_FUNID,
-    TK_COMMA,
-    TK_INPUT,
-    TK_UNION,
-    TK_RECORD,
-    TK_DOT,
-    TK_RUID,
-    TK_WRITE,
-    TK_ENDUNION,
-    TK_FIELDID,
-    TK_LIST,
-    TK_AND,
-    TK_CL,
-    TK_ASSIGNOP,
-    TK_OUTPUT,
-    TK_EQ,
-    TK_ENDIF,
-    TK_GLOBAL,
-    TK_AS,
-    TK_COLON,
-    TK_NE,
-    TK_GE,
-    TK_LE,
-    TK_SQR,
-    TK_END,
-    TK_PLUS,
-    TK_ENDRECORD,
-    TK_READ,
-    TK_LT,
-    TK_SQL,
-    TK_NUM,
-    TK_RNUM,
-    TK_PARAMETER,
-    TK_MUL,
-    TK_REAL,
-    TK_EPS,
-    TK_EOF,
-    TK_COMMENT,
-    TK_ERR
-} TokenType;
-
-typedef enum
-{
-
-    NON_FINAL = 0,
-    FINAL_NO_RETRACT = 1,
-    FINAL_RETRACTONCE = 2,
-    FINAL_RETRACTTWICE = 3,
-
-} StateDetail;
+#include "lexer.h"
 
 const char *TokenStr[] = {
     "TK_MINUS",
@@ -144,31 +66,6 @@ const char *TokenStr[] = {
     "TK_EOF",
     "TK_COMMENT",
     "TK_ERR"};
-
-typedef struct
-{
-    TokenType type;
-    char lexeme[100]; // store the actual lexeme
-    int lineNo;       // line number
-
-} Token;
-
-
-#define EOF_SENTINEL '\0'
-
-typedef struct
-{
-    FILE *source;       // the input file
-    char **buffers;     // array of two char* buffers
-    int *charsInBuffer; // number of valid characters in each buffer
-    int currentBuffer;  // index (0 or 1)
-    int forwardPointer; // current read index in the active buffer
-    int bufferSize;     // how large each buffer is
-
-    // Additional state if you need them (like lineNo, current_s, etc.)
-    int lineNo;
-    int current_s;
-} twinBuffer;
 
 twinBuffer *createTwinBuffer(FILE *source, int bufSize)
 {
@@ -346,10 +243,6 @@ void retract(twinBuffer *B, int n)
 static int lineNo = 1;
 static int current_s = 0;
 
-int getState(char c, int current_state);
-int getStateDetails(twinBuffer *B,int state);
-
-
 //------------------------------------
 // 4. Keyword/Token Lookup
 //------------------------------------
@@ -401,16 +294,6 @@ TokenType lookupKeyword(const char *lex)
     }
     return TK_ID; // default
 }
-
-//------------------------------------
-// 5. Public functions to init/close
-//------------------------------------
-
-
-//------------------------------------
-// 6. The FSM: getToken()
-//------------------------------------
-
 
 // 5000.703?
 int getState(char c, int current_state)
@@ -737,7 +620,7 @@ int getState(char c, int current_state)
     }
 }
 
-int getStateDetails(twinBuffer *B,int state)
+int getStateDetails(twinBuffer *B, int state)
 {
     switch (state)
     {
@@ -776,40 +659,31 @@ int getStateDetails(twinBuffer *B,int state)
     case 53:
     case 56:
     case 63:
-        retract (B,1);
+        retract(B, 1);
         return FINAL_RETRACTONCE; // once retracting state
     case 38:
     case 62:
-        retract(B,2);  
+        retract(B, 2);
         return FINAL_RETRACTTWICE; // twice retracting state
-
 
     default:
         return NON_FINAL; // not final state
     }
 }
 
-typedef enum
-{
-    EXIT,
-    CONTINUE,
-    LENGTHEXCEEDED,
-    NOTINVALID,
-
-} InvalidToken;
-
-
 void token_fun(Token *token)
 {
     token->type = lookupKeyword(token->lexeme);
-    if(token->type == TK_ID){
+    if (token->type == TK_ID)
+    {
         token->type = TK_FIELDID;
     }
 }
 void id_fun(Token *token)
 {
-    token->type = lookupKeyword(token->lexeme); // checking for _main else 
-    if(token->type == TK_ID){
+    token->type = lookupKeyword(token->lexeme); // checking for _main else
+    if (token->type == TK_ID)
+    {
         token->type = TK_FUNID;
     }
 }
@@ -874,7 +748,7 @@ int doStateActions(Token *token, int state)
     case 26:
         token->type = TK_SQR;
         break;
-    
+
     case 64:
         token->type = TK_COMMA;
         break;
@@ -893,7 +767,7 @@ int doStateActions(Token *token, int state)
     case 61:
         token->type = TK_ASSIGNOP;
         break;
-  
+
     case 37:
         token->type = TK_NUM;
         break;
@@ -940,7 +814,7 @@ int doStateActions(Token *token, int state)
         token->type = TK_ERR;
         break;
     }
-    return NOTINVALID;
+    return NORMAL;
 }
 // Function to convert enum to string
 const char *getTokenStr(TokenType t)
@@ -952,33 +826,37 @@ const char *getTokenStr(TokenType t)
     return "UNKNOWN_TOKEN";
 }
 
-int newGetToken(twinBuffer *B,Token* token, int pos)
+int newGetToken(twinBuffer *B, Token *token, int pos)
 {
     char ch = getNextCharFromBuffer(B);
     int nextState = getState(ch, current_s);
 
     // Very weird logic i dont know why i did this
-    if(nextState == TRAP_STATE){
-        if(pos>=1){
-            retract(B,1);
+    if (nextState == TRAP_STATE)
+    {
+        if (pos >= 1)
+        {
+            retract(B, 1);
         }
-        else{
+        else
+        {
             token->lexeme[pos] = ch;
             token->lexeme[++pos] = '\0';
         }
-        return NOTINVALID;
+        return NORMAL;
     }
-    
-    int stateDetail = getStateDetails(B,nextState);
+
+    int stateDetail = getStateDetails(B, nextState);
 
     // only add to lexeme if not in final retract state
-    if(stateDetail != FINAL_RETRACTONCE && stateDetail != FINAL_RETRACTTWICE){
+    if (stateDetail != FINAL_RETRACTONCE && stateDetail != FINAL_RETRACTTWICE)
+    {
         token->lexeme[pos] = ch;
         token->lexeme[++pos] = '\0';
-       
     }
 
-    if(stateDetail != NON_FINAL){
+    if (stateDetail != NON_FINAL)
+    {
 
         if (pos >= LENGTHLEXEME)
         {
@@ -988,17 +866,16 @@ int newGetToken(twinBuffer *B,Token* token, int pos)
         int do_state_actions = doStateActions(token, nextState);
         // printf("Line no:%d sd=%d , type = %s , STATE : %d, l = %s\n", lineNo, stateDetail, getTokenStr(token->type), nextState, token->lexeme);
         return do_state_actions;
-        
     }
-    
+
     else
-    {   
+    {
         current_s = nextState;
-        return newGetToken(B,token, pos);
+        return newGetToken(B, token, pos);
     }
 }
 
-int printToken(Token* t)
+int printToken(Token *t)
 {
 
     if (t->type == TK_EOF)
@@ -1018,7 +895,17 @@ int printToken(Token* t)
     return 1;
 }
 
-void driverToken(FILE *fp){
+void driverToken(char *fn)
+{
+
+    FILE *fp = NULL;
+
+    fp = fopen(fn, "r");
+    if (!fp)
+    {
+        perror("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
 
     lineNo = 1;
     twinBuffer *B = createTwinBuffer(fp, 50);
@@ -1036,41 +923,20 @@ void driverToken(FILE *fp){
         t.lineNo = lineNo;
         t.type = TK_ERR;
 
-        int x = newGetToken(B,&t, 0);
+        int x = newGetToken(B, &t, 0);
 
         current_s = 0;
         if (x == EXIT)
         {
             break;
         }
-        if(x == CONTINUE){
+        if (x == CONTINUE)
+        {
             continue;
         }
-        
+
         printToken(&t);
-        
     }
     destroyTwinBuffer(B);
-}
-
-int main(int argc, char **argv)
-{
-    FILE *fp = NULL;
-    if (argc > 1)
-    {
-        fp = fopen(argv[1], "r");
-        if (!fp)
-        {
-            perror("Failed to open file");
-            return 1;
-        }
-    }
-    else
-    {
-        fp = stdin;
-    }
-
-    driverToken(fp);
-    
-    return 0;
+    fclose(fp);
 }
