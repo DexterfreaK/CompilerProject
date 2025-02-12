@@ -4,11 +4,10 @@
 #include <string.h>
 #include <ctype.h>
 
-
-
 //-------------------
 // Token Types
 //-------------------
+// order should be strictly same as the order of the tokens in the enum
 typedef enum
 {
     TK_MINUS,
@@ -140,8 +139,8 @@ typedef struct
     TokenType type;
     char lexeme[100]; // store the actual lexeme
     int lineNo;       // line number
-} Token;
 
+} Token;
 
 #define BUFFER_SIZE 8
 #define EOF_SENTINEL '\0'
@@ -154,7 +153,10 @@ static int charsInBuffer[2] = {0, 0};
 
 // We also keep a global line number
 static int lineNo = 1;
+static int current_s = 0;
 
+int getState(char c, int current_state);
+int getStateDetails(int state);
 //------------------------------------
 // Twin Buffer Helper Functions
 //------------------------------------
@@ -190,6 +192,19 @@ static char getNextCharFromBuffer()
             return EOF;
     }
     forwardPointer++;
+
+    int temp = getState(ch, current_s);
+    if (temp != -1)
+        current_s = temp;
+    else
+        current_s = 0;
+    // printf("CURRENT STATE : %d for %c \n", current_s, ch);
+
+    if (getStateDetails(current_s) != 0)
+    {
+        current_s = 0;
+    }
+
     return ch;
 }
 
@@ -299,7 +314,7 @@ void closeLexer()
     3) [0-9]+ "." [0-9]+ (E|e) [ + | - | ε ] [0-9]+ -> TK_RNUM
 */
 
-// 5000.7 bt
+// 5000.703?
 Token handleNumericLiteral(char firstChar)
 {
     Token token;
@@ -340,16 +355,9 @@ Token handleNumericLiteral(char firstChar)
         c = getNextCharFromBuffer();
         if (!isdigit((unsigned char)c))
         {
-            // Handle error: "123." with no digits after decimal
-            // Or decide to retract and treat as integer—depends on your language spec
             retract(1);
-            // For safety, let's just do an error or decide a fallback
-            // but for now let's fallback: we keep it as integer.
-            // If you want it to be an error, handle that differently.
-            // We'll revert the '.' if you want to treat "123." as an error:
-            lexPos--;
             token.lexeme[lexPos] = '\0';
-            token.type = TK_NUM;
+            token.type = TK_ERR;
             token.lineNo = lineNo;
             return token;
         }
@@ -357,6 +365,7 @@ Token handleNumericLiteral(char firstChar)
         // read first digit after the decimal point
         token.lexeme[lexPos++] = c;
 
+        int afterdecimal = 1;
         // read subsequent digits
         while (1)
         {
@@ -364,12 +373,20 @@ Token handleNumericLiteral(char firstChar)
             if (isdigit((unsigned char)c))
             {
                 token.lexeme[lexPos++] = c;
+                afterdecimal++;
             }
             else
             {
                 retract(1);
                 break;
             }
+        }
+        if (afterdecimal != 2)
+        {
+            token.lexeme[lexPos] = '\0';
+            token.type = TK_ERR;
+            token.lineNo = lineNo;
+            return token;
         }
     }
     else
@@ -555,12 +572,11 @@ Token handleFunctionID(char firstChar)
         }
     }
 
-
     // Finalize token
     token.lexeme[lexPos] = '\0';
     token.type = TK_FUNID;
     token.lineNo = lineNo;
-    
+
     // Look up in keyword table
     TokenType ttype = lookupKeyword(token.lexeme);
     if (ttype != TK_ID)
@@ -665,6 +681,378 @@ Token handleAlpha(char firstChar)
     return token;
 }
 
+int getState(char c, int current_state)
+{
+
+    if (current_state == 0)
+        switch (c)
+        {
+        case '%':
+            return 1;
+        case EOF:
+            return 3;
+        case '*':
+            return 4;
+        case '&':
+            return 5;
+        case '~':
+            return 8;
+        case '\n':
+            return 9;
+        case '@':
+            return 10;
+        case '[':
+            return 13;
+        case '-':
+            return 14;
+        case '+':
+            return 15;
+        case '(':
+            return 16;
+        case '=':
+            return 17;
+        case ')':
+            return 19;
+        case ';':
+            return 20;
+        case ':':
+            return 21;
+        case '!':
+            return 22;
+        case '/':
+            return 24;
+        case '.':
+            return 25;
+        case ']':
+            return 26;
+        case '\t':
+        case ' ':
+            return 27;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            return 29;
+        case '#':
+            return 40;
+        case '_':
+            return 43;
+        case ',':
+            return 64;
+
+        case 'b':
+        case 'c':
+        case 'd':
+            return 47;
+
+        case 'a':
+        case 'e':
+        case 'f':
+        case 'g':
+        case 'h':
+        case 'i':
+        case 'j':
+        case 'k':
+        case 'l':
+        case 'm':
+        case 'n':
+        case 'o':
+        case 'p':
+        case 'q':
+        case 'r':
+        case 's':
+        case 't':
+        case 'u':
+        case 'v':
+        case 'w':
+        case 'x':
+        case 'y':
+        case 'z':
+            return 48;
+        case '>':
+            return 54;
+        case '<':
+            return 57;
+
+        default:
+            return -1;
+        }
+    else
+    {
+
+        if (current_state == 1){
+            if (c == '\n')
+                return 2;
+            else
+                return 1;
+        }
+        if (current_state == 5 && c == '&')
+            return 6;
+        if (current_state == 6 && c == '&')
+            return 7;
+        if (current_state == 10 && c == '@')
+            return 11;
+        if (current_state == 11 && c == '@')
+            return 12;
+        if (current_state == 17 && c == '=')
+            return 18;
+        if (current_state == 22 && c == '=')
+            return 23;
+        if (current_state == 27)
+        {
+            if (c == '\t' || c == ' ')
+            {
+                return 27;
+            }
+            else
+                return 28;
+        }
+        if (current_state == 29)
+        {
+            if (c >= '0' && c <= '9')
+                return 29;
+            else if (c == '.')
+                return 30;
+            else
+                return 39;
+        }
+        if (current_state == 30)
+        {
+            if (c >= '0' && c <= '9')
+                return 31;
+            else
+                return 38;
+        }
+        if (current_state == 31 && c >= '0' && c <= '9')
+            return 32;
+
+        if (current_state == 32)
+        {
+            if (c == 'E' || c == 'e')
+                return 33;
+            else
+                return 37;
+        }
+        if (current_state == 33)
+        {
+            if (c == '+' || c == '-')
+            {
+                return 34;
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                return 35;
+            }
+        }
+
+        if (current_state == 34)
+        {
+            if (c >= '0' && c <= '9')
+            {
+                return 35;
+            }
+        }
+
+        if (current_state == 35)
+        {
+            if (c >= '0' && c <= '9')
+            {
+                return 36;
+            }
+        }
+
+        if (current_state == 40 && c >= 'a' && c <= 'z')
+        {
+            return 41;
+        }
+        if (current_state == 41)
+        {
+            if (c >= 'a' && c <= 'z')
+                return 41;
+            else
+                return 42;
+        }
+
+        if (current_state == 43 && ((c >= 'a' && c <= 'z') || c >= 'A' && c <= 'Z'))
+        {
+            return 44;
+        }
+
+        if (current_state == 44)
+        {
+            if (((c >= 'a' && c <= 'z') || c >= 'A' && c <= 'Z'))
+                return 44;
+            else if (c >= '0' && c <= '9')
+                return 45;
+            else
+                return 46;
+        }
+
+        if (current_state == 45)
+        {
+            if (c >= '0' && c <= '9')
+            {
+                return 45;
+            }
+            else
+            {
+                return 46;
+            }
+        }
+
+        if (current_state == 47)
+        {
+            if (c >= 'a' && c <= 'z')
+            {
+                return 48;
+            }
+            else if (c >= '2' && c <= '7')
+            {
+                return 50;
+            }
+            else
+            {
+                return 53;
+            }
+        }
+        if (current_state == 48)
+        {
+            if (c >= 'a' && c <= 'z')
+            {
+                return 48;
+            }
+            else
+            {
+                return 49;
+            }
+        }
+
+        if (current_state == 50)
+        {
+            if (c >= 'b' && c <= 'd')
+            {
+                return 50;
+            }
+            else if (c >= '2' && c <= '7')
+            {
+                return 51;
+            }
+            else
+                return 52;
+        }
+
+        if (current_state == 51)
+        {
+            if (c >= '2' && c <= '7')
+            {
+                return 51;
+            }
+            else
+                return 52;
+        }
+        if (current_state == 54)
+        {
+            if (c == '=')
+            {
+                return 55;
+            }
+            else
+                return 56;
+        }
+        if (current_state == 57)
+        {
+            if (c == '=')
+            {
+                return 58;
+            }
+            else if (c == '-')
+            {
+                return 59;
+            }
+            else
+                return 63;
+        }
+
+        if (current_state == 59)
+        {
+            if (c == '-')
+            {
+                return 60;
+            }
+            else
+            {
+                return 62;
+            }
+        }
+        if (current_state == 60)
+        {
+            if (c == '-')
+            {
+                return 61;
+            }
+            else
+            {
+                return 69; /// kya karna hai yahan bc
+            }
+        }
+        return -1; // trap state TK_ERR
+    }
+}
+
+int getStateDetails(int state)
+{
+    switch (state)
+    {
+    case 2:
+    case 3:
+    case 4:
+    case 7:
+    case 8:
+    case 9:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 64:
+    case 36:
+    case 55:
+    case 58:
+    case 61:
+        return 1; // non retracting state
+    case 28:
+    case 37:
+    case 39:
+    case 42:
+    case 46:
+    case 49:
+    case 52:
+    case 53:
+    case 56:
+    case 63:
+        return 2; // once retracting state
+    case 38:
+    case 62:
+        return 3; // twice retracting state
+    default:
+        return 0; // not final state
+    }
+}
+
 Token getToken()
 {
     Token token;
@@ -690,48 +1078,25 @@ Token getToken()
         token.lineNo = lineNo;
         return token;
     }
-    if (c == '#'){
+    if (c == '#')
+    {
         return handleRecordUnionId(c);
     }
-    if (c == '_'){
+    if (c == '_')
+    {
         return handleFunctionID(c);
     }
-    // Example FSM: handle identifiers/keywords 
-    if (isalpha((unsigned char)c) )
+    // Example FSM: handle identifiers/keywords
+    if (isalpha((unsigned char)c))
     {
-        // collect alphanumeric (and underscore) to form an identifier or keyword
-        // token.lexeme[lexPos++] = c;
-
-        // while (1)
-        // {
-        //     c = getNextCharFromBuffer();
-        //     if (isalnum((unsigned char)c))
-        //     {
-        //         token.lexeme[lexPos++] = c;
-        //     }
-        //     else
-        //     {
-        //         // we've gone one char too far
-        //         retract(1);
-        //         break;
-        //     }
-        // }
-        // token.lexeme[lexPos] = '\0';
-
-        // // now do keyword lookup
-        // token.type = lookupKeyword(token.lexeme);
-        // token.lineNo = lineNo;
-        // return token;
-
         return handleAlpha(c);
     }
 
-    // Example handle of a numeric literal
     if (isdigit((unsigned char)c))
     {
         return handleNumericLiteral(c);
     }
- 
+
     // ------- MULTI-CHARACTER OPERATORS --------
     if (c == '>')
     {
@@ -763,15 +1128,18 @@ Token getToken()
         // Peek ahead
         char c2 = getNextCharFromBuffer();
 
-        if (c2 == '-'){
+        if (c2 == '-')
+        {
             token.lexeme[1] = c2;
 
             char c3 = getNextCharFromBuffer();
-            if (c3 == '-'){
+            if (c3 == '-')
+            {
                 token.lexeme[2] = c3;
-                
+
                 char c4 = getNextCharFromBuffer();
-                if (c4 == '-'){
+                if (c4 == '-')
+                {
                     token.lexeme[3] = c4;
                     token.lexeme[4] = '\0';
 
@@ -779,19 +1147,20 @@ Token getToken()
                     token.lineNo = lineNo;
                     return token;
                 }
-                else{
+                else
+                {
                     // token.lexeme[3] = '\0';
                     // retract(1);
                     // return token;
                     //????????
                 }
             }
-            else{
+            else
+            {
                 token.lexeme[2] = '\0';
                 retract(2);
                 return token;
             }
-
         }
 
         else if (c2 == '=')
@@ -824,7 +1193,7 @@ Token getToken()
             token.lexeme[1] = c2;
             char c3 = getNextCharFromBuffer();
             if (c3 == '&')
-            {   
+            {
                 token.lexeme[2] = c3;
                 token.lexeme[3] = '\0';
 
@@ -900,12 +1269,11 @@ Token getToken()
         }
         else
         {
-            
+
             retract(1);
             token.lexeme[1] = '\0';
             return token;
         }
-        
     }
     else if (c == '!')
     {
@@ -939,7 +1307,7 @@ Token getToken()
     switch (c)
     {
     case '%':
-        
+
         while (1)
         {
             c = getNextCharFromBuffer();
@@ -966,7 +1334,7 @@ Token getToken()
     case '-':
         token.type = TK_MINUS;
         break;
-    case '+': 
+    case '+':
         token.type = TK_PLUS;
         break;
     case '(':
@@ -978,7 +1346,7 @@ Token getToken()
     case ';':
         token.type = TK_SEM;
         break;
-    case ':' :
+    case ':':
         token.type = TK_COLON;
         break;
     case '/':
@@ -1000,8 +1368,37 @@ Token getToken()
     return token;
 }
 
+Token newGetToken()
+{
 
+    Token token;
+    token.lexeme[0] = '\0';
+    token.type = TK_ERR;
+    token.lineNo = lineNo;
 
+    char ch = getNextCharFromBuffer();
+    int temp = getState(ch, current_s);
+    int st = getStateDetails(temp);
+
+    if (st == 1)
+    {
+        current_s = 0;
+    }
+    else if (st == 2)
+    {
+        retract(1);
+        current_s = 0;
+    }
+    else if (st == 3)
+    {
+        retract(2);
+        current_s = 0;
+    }
+    else
+    {
+        newGetToken();
+    }
+}
 // Function to convert enum to string
 const char *getTokenStr(TokenType t)
 {
@@ -1010,6 +1407,26 @@ const char *getTokenStr(TokenType t)
         return TokenStr[t];
     }
     return "UNKNOWN_TOKEN";
+}
+
+int printToken(Token t)
+{
+
+    if (t.type == TK_EOF)
+    {
+        return -1;
+    }
+    if (t.type == TK_ERR)
+    {
+        printf("Line no. %d\t Error: Unknown pattern <%s> \n", t.lineNo, t.lexeme);
+    }
+    else
+    {
+        const char *tokenName = NULL;
+        tokenName = getTokenStr(t.type);
+        printf("Line no. %d\t Lexeme %-10s\t Token %s\n", t.lineNo, t.lexeme, tokenName);
+    }
+    return 1;
 }
 
 int main(int argc, char **argv)
@@ -1035,21 +1452,9 @@ int main(int argc, char **argv)
     while (1)
     {
         Token t = getToken();
-        if (t.type == TK_EOF)
+        if (printToken(t) == -1)
         {
-            // Print or not, your choice
-            printf("Line no. %d\t Lexeme %-10s\t Token TK_EOF\n", t.lineNo, t.lexeme);
             break;
-        }
-        if (t.type == TK_ERR)
-        {
-            printf("Line no. %d\t Lexeme %-10s\t Token TK_ERR\n", t.lineNo, t.lexeme);
-        }
-        else
-        {
-            const char *tokenName = NULL;
-            tokenName = getTokenStr(t.type);
-            printf("Line no. %d\t Lexeme %-10s\t Token %s\n", t.lineNo, t.lexeme, tokenName);
         }
     }
 
