@@ -11,7 +11,7 @@
 #define TRAP_STATE -1
 #define LENGTHLEXEME 22
 #define EOF_SENTINEL '\0'
-
+#define BUFFER_SIZE 128
 /*-------------------
    Token Types
   -------------------*/

@@ -927,7 +927,7 @@ void driverToken(char *fn)
     }
 
     lineNo = 1;
-    twinBuffer *B = createTwinBuffer(fp, 50);
+    twinBuffer *B = createTwinBuffer(fp, BUFFER_SIZE);
 
     if (!B)
     {

@@ -1,0 +1,36 @@
+% Test Case 4: Stress test for record/union, function IDs, weird underscores, #tokens, etc.
+
+% Trying out record, union, RUID (#...), function IDs, colons, dots.
+
+record 
+    #myrectype   % RUID: # followed by identifier
+    myfield : int;
+    othremyfield : real;
+endrecord
+
+union
+    #myUnion_abc
+    unionfield : int;
+    unionfd : real;
+endunion
+
+% Nested or strange function identifiers and field IDs
+_veryLongFunctionNameXYZ123 parameter list [real rNum1, int iVal2] output [int outVal];
+    rNum1 <--- 0.9999E-2;
+    outVal <--- (iVal2 + 1000 / 10);
+    return [outVal];
+end
+
+_main
+    type real : _under_score_field;
+    _under_score_field <--- 999.999;
+    write(_under_score_field);
+    
+    % Attempt a "call" with weird spacing, commas
+    call   _veryLongFunctionNameXYZ123    with parameters [ rNum1  ,    iVal2  ];
+    
+    .   % Single dot — check if lexer flags it or treats it as TK_DOT
+    
+    #invalid#token    % Possibly breaks lexer if it can't handle back-to-back '#' or no space
+    return;
+end
