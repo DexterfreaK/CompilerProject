@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "parser.h"
+
 
 int main(int argc, char **argv)
 {
@@ -28,6 +30,9 @@ int main(int argc, char **argv)
             break;
         case 2:
             driverToken(argv[1]);
+            break;
+        case 3:
+            parser_main();
             break;
         case 4:
         {

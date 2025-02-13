@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "../include/parser.h"
-#include "../include/vectorofvector.h"
+#include "parser.h"
 
 /**
  * @brief Initializes a Vector.
@@ -1121,11 +1120,12 @@ VectorOfVector *initialize_grammar() {
     return grammar;
 }
 
-//TODO: Remove this main function before submitting the assignment.
-//this main function is just for testing the grammar initialization.
-int main() {
+// TODO: Remove this main function before submitting the assignment.
+// this main function is just for testing the grammar initialization.
+int parser_main()
+{
     // Initialize the grammar.
-    FILE *fp=fopen("test.txt","a+");
+    // FILE *fp = fopen("test.txt", "a+");
     VectorOfVector *grammar = initialize_grammar();
 
     // Print the grammar using the printVectorOfVector function.
@@ -1133,7 +1133,7 @@ int main() {
     printVectorOfVector(grammar);
 
     // Example: Access the element at production index 'i' and element index 'j'.
-    int i = 0, j = 1;  // Change these indices as needed.
+    int i = 0, j = 1; // Change these indices as needed.
     int element = accessVectorOfVector(grammar, i, j);
     printf("Element at production %d, index %d: %d\n", i, j, element);
 

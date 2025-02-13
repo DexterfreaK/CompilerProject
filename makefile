@@ -14,11 +14,11 @@ SRC = $(wildcard $(SRC_DIR)/*.c)  # Finds all .c files in src/
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))  # Converts .c to .o
 BIN = $(BIN_DIR)/compiler  # Output executable
 
-TEST = $(TEST_DIR)/t3.txt
+TESTFILE = $(TEST_DIR)/t1.txt
 
 # Default Target
 all: $(BIN)
-	$(BIN) $(TEST)
+	$(BIN) $(TESTFILE)
 
 # Create binary executable
 $(BIN): $(OBJ) | $(BIN_DIR)

@@ -11,7 +11,7 @@
 #define TRAP_STATE -1
 #define LENGTHLEXEME 22
 #define EOF_SENTINEL '\0'
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 512
 /*-------------------
    Token Types
   -------------------*/
@@ -143,9 +143,9 @@ static inline char *getTokenStr(TokenType t)
       "TK_EPS",
       "TK_EOF",
       "TK_COMMENT",
-      "TK_ERR"};
+    };
 
-  if (t >= TK_MINUS && t <= TK_ERR)
+  if (t >= TK_MINUS && t <= TK_COMMENT)
   {
     return TokenStr[t];
   }
@@ -185,7 +185,7 @@ typedef struct
 {
   TokenType type;
   TokenCategory cat;
-  char lexeme[100]; // Actual lexeme
+  char lexeme[BUFFER_SIZE]; // Actual lexeme
   int lineNo;       // Line number in source file
 } Token;
 
@@ -221,7 +221,7 @@ void id_fun(Token *token);
 void doStateActions(Token *token, int state);
 // const char *getTokenStr(TokenType t);
 void newGetToken(twinBuffer *B, Token *token, int pos);
-int printToken(Token *t);
+void printToken(Token *t);
 
 /* Driver function */
 void driverToken(char *fn);

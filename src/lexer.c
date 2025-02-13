@@ -1,12 +1,13 @@
 // line 627
 // 5000.703?
+// EOF not encountered then?
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "lexer.h"
-
 
 twinBuffer *createTwinBuffer(FILE *source, int bufSize)
 {
@@ -55,7 +56,6 @@ twinBuffer *createTwinBuffer(FILE *source, int bufSize)
     }
     B->charsInBuffer[0] = 0;
     B->charsInBuffer[1] = 0;
-
 
     // Pre-load the first buffer so we are ready to read
     size_t bytesRead = fread(B->buffers[0], sizeof(char), B->bufferSize, B->source);
@@ -533,7 +533,7 @@ int getState(char c, int current_state)
             }
             else
             {
-                return TRAP_STATE; 
+                return TRAP_STATE;
             }
         }
         return TRAP_STATE; // trap state TK_ERR
@@ -732,9 +732,7 @@ void doStateActions(Token *token, int state)
         // Whitespace token – do not return a token.
         token->cat = CONTINUE;
         return;
-
     default:
-        token->type = TK_ERR;
         token->cat = ERROR;
         break;
     }
@@ -760,7 +758,7 @@ void newGetToken(twinBuffer *B, Token *token, int pos)
             token->lexeme[++pos] = '\0';
         }
 
-        token->cat = NORMAL;
+        token->cat = ERROR;
         return;
     }
 
@@ -773,8 +771,8 @@ void newGetToken(twinBuffer *B, Token *token, int pos)
             token->lexeme[pos] = ch;
             token->lexeme[++pos] = '\0';
         }
-    
-    if(stateDetail == FINAL_RETRACTTWICE)
+
+    if (stateDetail == FINAL_RETRACTTWICE)
     {
         token->lexeme[pos - 1] = '\0';
     }
@@ -800,18 +798,13 @@ void newGetToken(twinBuffer *B, Token *token, int pos)
     }
 }
 
-int printToken(Token *t)
+void printToken(Token *t)
 {
-
-    if (t->type == TK_EOF)
-    {
-        return -1;
-    }
     if (t->cat == LENGTHEXCEEDED)
     {
         printf("Line no. %d\t Error: Variable Identifier is longer than the prescribed length of %d characters\n", t->lineNo, LENGTHLEXEME);
     }
-    else if (t->type == TK_ERR)
+    else if (t->cat == ERROR)
     {
         printf("Line no. %d\t Error: Unknown pattern <%s> \n", t->lineNo, t->lexeme);
     }
@@ -821,14 +814,12 @@ int printToken(Token *t)
         tokenName = getTokenStr(t->type);
         printf("Line no. %d\t Lexeme %-10s\t Token %s\n", t->lineNo, t->lexeme, tokenName);
     }
-    return 1;
 }
 
 void driverToken(char *fn)
 {
 
     FILE *fp = NULL;
-
     fp = fopen(fn, "r");
     if (!fp)
     {
@@ -850,7 +841,6 @@ void driverToken(char *fn)
         Token t;
         t.lexeme[0] = '\0';
         t.lineNo = lineNo;
-        t.type = TK_ERR;
         t.cat = NORMAL;
 
         newGetToken(B, &t, 0);

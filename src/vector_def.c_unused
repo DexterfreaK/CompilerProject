@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "../include/vectorofvector.h"
+#include "vectorofvector.h"
 
-/**
+/**1
  * @brief Initializes a Vector.
  *
  * @param v Pointer to the Vector to initialize.
