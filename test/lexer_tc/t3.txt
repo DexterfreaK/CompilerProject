@@ -15,7 +15,7 @@ _main      % This should still parse as an identifier token TK_MAIN (keyword if 
 
 % Real numbers with multiple decimal points, exponents, signs:
 % below main bt hai
-0. .234  12. .0e+5   23.45E+  23.45E+10  12.3400E-03
+0. .234  12. .0e+5   23.45E+  23.456E+10  12.3400E-03
 12.34E++10  % Possibly malformed exponent (should break or cause a lexer error)
 
 c2 <---  -123.456E+7;   % Valid assignment if your syntax allows negative sign

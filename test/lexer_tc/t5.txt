@@ -28,3 +28,1581 @@ _main
     
     return;
 end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end
+
+% Test Case 5: Heavy operator usage, malformed tokens, tricky comments
+
+% Mix of operators: +, -, /, *, &&&, @@@, relational operators, etc.
+% Also includes partial or malformed tokens to see if the lexer rejects them.
+
+% Program to demonstrate extreme usage of operators
+_main
+    type int : b2;
+    type real : c3;
+    b2 <--- 500;
+    c3 <--- 100.00E+24;
+
+    b2 <--- b2+++2;       % Might be seen as "b2 ++ + 2" or a malformed operator
+    c3 <--- (c3 - - 3.14);% Similarly testing repeated minus
+    c3 <--- c3 *** 2;     % " *** " might be recognized or break the lexer 
+    c3 <--- c3 @@@ 1;     % Check if @@@ is a valid token in your language or not
+
+    if ( b2 &&& 1000 ) then
+        b2 <--- b2 / 0.0; % division by zero, but we care about the lexical side
+    endif
+
+    % Random partial tokens that might fail:
+    <-
+    = 
+    <-- real 12.3..4
+    123E
+    % Make sure your lexer can either handle or reject these gracefully
+    
+    return;
+end

@@ -1,19 +1,24 @@
 # Compiler and Flags
+
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude -g  # Enable warnings and debugging
+CFLAGS = -Iinclude 
 LDFLAGS =  # Add linker flags if needed
 
 # Source and Object Files
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
+TEST_DIR = test/lexer_tc
 
 SRC = $(wildcard $(SRC_DIR)/*.c)  # Finds all .c files in src/
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))  # Converts .c to .o
 BIN = $(BIN_DIR)/compiler  # Output executable
 
+TEST = $(TEST_DIR)/t3.txt
+
 # Default Target
 all: $(BIN)
+	$(BIN) $(TEST)
 
 # Create binary executable
 $(BIN): $(OBJ) | $(BIN_DIR)

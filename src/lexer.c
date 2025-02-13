@@ -1,3 +1,5 @@
+// line 627
+// 5000.703?
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,77 +7,6 @@
 #include <ctype.h>
 #include "lexer.h"
 
-const char *TokenStr[] = {
-    "TK_MINUS",
-    "TK_IF",
-    "TK_DIV",
-    "TK_CALL",
-    "TK_WITH",
-    "TK_MAIN",
-    "TK_ENDWHILE",
-    "TK_TYPE",
-    "TK_ELSE",
-    "TK_INT",
-    "TK_NOT",
-    "TK_GT",
-    "TK_PARAMETERS",
-    "TK_THEN",
-    "TK_SEM",
-    "TK_RETURN",
-    "TK_ID",
-    "TK_DEFINETYPE",
-    "TK_OP",
-    "TK_WHILE",
-    "TK_OR",
-    "TK_FUNID",
-    "TK_COMMA",
-    "TK_INPUT",
-    "TK_UNION",
-    "TK_RECORD",
-    "TK_DOT",
-    "TK_RUID",
-    "TK_WRITE",
-    "TK_ENDUNION",
-    "TK_FIELDID",
-    "TK_LIST",
-    "TK_AND",
-    "TK_CL",
-    "TK_ASSIGNOP",
-    "TK_OUTPUT",
-    "TK_EQ",
-    "TK_ENDIF",
-    "TK_GLOBAL",
-    "TK_AS",
-    "TK_COLON",
-    "TK_NE",
-    "TK_GE",
-    "TK_LE",
-    "TK_SQR",
-    "TK_END",
-    "TK_PLUS",
-    "TK_ENDRECORD",
-    "TK_READ",
-    "TK_LT",
-    "TK_SQL",
-    "TK_NUM",
-    "TK_RNUM",
-    "TK_PARAMETER",
-    "TK_MUL",
-    "TK_REAL",
-    "TK_EPS",
-    "TK_EOF",
-    "TK_COMMENT",
-    "TK_ERR"};
-
-    // Function to convert enum to string
-const char *getTokenStr(TokenType t)
-{
-    if (t >= TK_MINUS && t <= TK_ERR)
-    {
-        return TokenStr[t];
-    }
-    return "UNKNOWN_TOKEN";
-}
 
 twinBuffer *createTwinBuffer(FILE *source, int bufSize)
 {
@@ -125,9 +56,6 @@ twinBuffer *createTwinBuffer(FILE *source, int bufSize)
     B->charsInBuffer[0] = 0;
     B->charsInBuffer[1] = 0;
 
-    // Initialize any additional state if necessary
-    B->lineNo = 1;
-    B->current_s = 0;
 
     // Pre-load the first buffer so we are ready to read
     size_t bytesRead = fread(B->buffers[0], sizeof(char), B->bufferSize, B->source);
@@ -208,24 +136,6 @@ int getNextCharFromBuffer(twinBuffer *B)
     }
 
     B->forwardPointer++;
-
-    // If you need to track states, do it here:
-    // int temp = getState(ch, B->current_s);
-    // if (temp != -1)
-    //     B->current_s = temp;
-    // else
-    //     B->current_s = 0;
-    //
-    // if (getStateDetails(B->current_s) != 0)
-    // {
-    //     B->current_s = 0;
-    // }
-
-    // Possibly handle line numbers if needed:
-    // if (ch == '\n') {
-    //     B->lineNo++;
-    // }
-
     return (unsigned char)ch;
 }
 
@@ -623,7 +533,7 @@ int getState(char c, int current_state)
             }
             else
             {
-                return 69; /// kya karna hai yahan bc
+                return TRAP_STATE; 
             }
         }
         return TRAP_STATE; // trap state TK_ERR
