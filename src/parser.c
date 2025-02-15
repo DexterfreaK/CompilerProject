@@ -166,55 +166,82 @@ void printVectorOfVector(VectorOfVector *vv) {
 }
 
 
-// Computes the FOLLOW set of a term
-void Follow(int n, grammar G, int temp_array[100], FirstAndFollow F, int check_recursion[NONTERMINALS])
+// checks if term is already present
+int checker(int *temp, int n)
+{
+    int i = 0, flag = 0;
+    while(temp[i] != 0)
+    {
+        if (temp[i] == n)
+        {
+            flag = -1;
+            break;
+        }
+        ++i;
+    }
+    return flag; // if b is in array a
+}
+
+
+/**
+ * @brief Computes the FOLLOW set for a given non-terminal in a grammar.
+ * 
+ * @param n The non-terminal whose FOLLOW set is being computed.
+ * @param gmr The given grammar, stored as a structured data type.
+ * @param buffer An array that temporarily stores the FOLLOW set of n.
+ * @param FF A structure containing:
+ *        - F->firstset: FIRST sets for each non-terminal.
+ *        - F->followset: FOLLOW sets for each non-terminal.
+ * @param check A flag array used to prevent infinite recursion.
+ */
+void FollowSet(int n, grammar gmr, int buffer[150], First_Follow FF, int check[NONTERMINALS])
 {
     int j = 0, k;
-    if (check_recursion[n] == 1)
+    if (check[n] == 1)
     {
-        check_recursion[n] = 0;
+        check[n] = 0;
         return;
     }
     if (n == 1)
     {
-        temp_array[j++] = -1;
+        buffer[j++] = -1;
     }
     for (int i = 0; i < GRAMMAR_SIZE; i++)
     {
-        for (int m = 1; m < 10; m++)
+        for (int p = 1; p < 12; p++)
         {
-            if (accessVectorOfVector(G,i,m) == -1)
+            if (accessVectorOfVector(gmr,i,p) == -1)
                 break;
-            if (accessVectorOfVector(G,i,m) == n)
+            if (accessVectorOfVector(gmr,i,p) == n)
             {
-                for (k = m + 1; accessVectorOfVector(G,i,k) != -1; k++)
+                for (k = p + 1; accessVectorOfVector(gmr,i,k) != -1; k++)
                 {
-                    int flag = 0;
-                    for (int l = 0; F->first[accessVectorOfVector(G,i,k)][l] != 0; l++)
+                    int epsn = 0;
+                    for (int l = 0; FF->firstset[accessVectorOfVector(gmr,i,k)][l] != 0; l++)
                     {
-                        if (F->first[accessVectorOfVector(G,i,k)][l] == EPSN)
-                            flag = 1;
+                        if (FF->firstset[accessVectorOfVector(gmr,i,k)][l] == EPSILON)
+                            epsn = 1;
                         else
                         {
-                            if (!check_term(temp_array, F->first[accessVectorOfVector(G,i,k)][l]))
+                            if (!checker(buffer, FF->firstset[accessVectorOfVector(gmr,i,k)][l]))
                             {
-                                temp_array[j++] = F->first[accessVectorOfVector(G,i,k)][l];
+                                buffer[j++] = FF->firstset[accessVectorOfVector(gmr,i,k)][l];
                             }
                         }
                     }
-                    if (flag != 1)
+                    if (!epsn)
                         break;
                 }
-                if (accessVectorOfVector(G,i,k) == -1 && accessVectorOfVector(G,i,0) != n)
+                if (accessVectorOfVector(gmr,i,k) == -1 && accessVectorOfVector(gmr,i,0) != n)
                 {
-                    check_recursion[accessVectorOfVector(G,i,0)] = 1;
-                    Follow(accessVectorOfVector(G,i,0), G, F->follow[accessVectorOfVector(G,i,0)], F, check_recursion);
-                    check_recursion[accessVectorOfVector(G,i,0)] = 0;
-                    for (int l = 0; F->follow[accessVectorOfVector(G,i,0)][l] != 0; l++)
+                    check[accessVectorOfVector(gmr,i,0)] = 1;
+                    Follow(accessVectorOfVector(gmr,i,0), gmr, FF->followset[accessVectorOfVector(gmr,i,0)], FF, check);
+                    check[accessVectorOfVector(gmr,i,0)] = 0;
+                    for (int l = 0; FF->followset[accessVectorOfVector(gmr,i,0)][l] != 0; l++)
                     {
-                        if (!check_term(temp_array, F->follow[accessVectorOfVector(G,i,0)][l]))
+                        if (!checker(buffer, FF->followset[accessVectorOfVector(gmr,i,0)][l]))
                         {
-                            temp_array[j++] = F->follow[accessVectorOfVector(G,i,0)][l];
+                            buffer[j++] = FF->followset[accessVectorOfVector(gmr,i,0)][l];
                         }
                     }
                 }
@@ -224,6 +251,47 @@ void Follow(int n, grammar G, int temp_array[100], FirstAndFollow F, int check_r
 }
 
 
+
+
+// Takes input as G, computes the FIRST and FOLLOW sets
+First_Follow ComputeFirstAndFollowSets(grammar G)
+{
+    First_Follow F = (First_Follow)malloc(sizeof(First_Follow));
+    F->firstset = (int **)malloc(TERMS_SIZE * sizeof(int *));
+    for (int i = 0; i < TERMS_SIZE; i++)
+    {
+        F->firstset[i] = (int *)malloc(20 * sizeof(int));
+        for (int j = 0; j < 20; j++)
+        {
+            F->firstset[i][j] = 0;
+        }
+    }
+    for (int i = 1; i < TERMS_SIZE; i++)
+    {
+        First(i, G, F->firstset[i], F);
+    }
+    F->followset = (int **)malloc((NONTERMINALS + 1) * sizeof(int *));
+    for (int i = 1; i <= NONTERMINALS; i++)
+    {
+        F->followset[i] = (int *)malloc(20 * sizeof(int));
+        for (int j = 0; j < 20; j++)
+        {
+            F->followset[i][j] = 0;
+        }
+    }
+    int check[NONTERMINALS] = {0};
+    int passes = 1;
+    while (passes != 6)
+    {
+
+        for (int i = 1; i <= NONTERMINALS; i++)
+        {
+            FollowSet(i, G, F->followset[i], F, check);
+        }
+        passes++;
+    }
+    return F;
+}
 
 
 
