@@ -105,37 +105,95 @@ void freeSyntaxTree(TreeNode* root) {
 }
 
 
-// Example usage of the syntax tree functions.
-// This example creates a syntax tree for the expression "1 + 2".
+
+// // Example usage of the syntax tree functions.
+// if(a<b) then a=a+1 else b=b+1
 
 // int main(void) {
-//     // --- Create tokens for the expression "1 + 2" ---
-//     // Assume createToken creates a token with the lexeme provided.
-//     Token* token1     = createToken("1");
-//     Token* tokenPlus  = createToken("+");
-//     Token* token2     = createToken("2");
+//     // -------------------------------
+//     // Create Tokens for the if-statement components.
+//     // -------------------------------
+//     // Condition: a < b
+//     Token* tok_a_cond = createToken("a");
+//     Token* tok_lt     = createToken("<");
+//     Token* tok_b_cond = createToken("b");
 
-//     // --- Create terminal (leaf) nodes for each token ---
-//     SyntaxTreeNode* leaf1    = createTerminalNode(token1);
-//     SyntaxTreeNode* leafPlus = createTerminalNode(tokenPlus);
-//     SyntaxTreeNode* leaf2    = createTerminalNode(token2);
+//     // Then branch (assignment): a = a + 1
+//     Token* tok_a_then1 = createToken("a");  // left-hand side of assignment
+//     Token* tok_eq_then = createToken("=");  // assignment operator
+//     Token* tok_a_then2 = createToken("a");  // left-hand side of addition
+//     Token* tok_plus_then = createToken("+");// addition operator
+//     Token* tok_1_then   = createToken("1");  // right-hand side of addition
 
-//     // --- Create a nonterminal node for the expression ---
-//     // Let's use symbolID = 100 to represent an "expression" nonterminal.
-//     // This nonterminal node will have 3 children: left operand, operator, right operand.
-//     SyntaxTreeNode* exprNode = createNonTerminalNode(100, 3);
-    
-//     // Attach the terminal nodes to the nonterminal node.
-//     setChild(exprNode, 0, leaf1);      // Left operand: "1"
-//     setChild(exprNode, 1, leafPlus);     // Operator: "+"
-//     setChild(exprNode, 2, leaf2);      // Right operand: "2"
+//     // Else branch (assignment): b = b + 1
+//     Token* tok_b_else1 = createToken("b");  // left-hand side of assignment
+//     Token* tok_eq_else = createToken("=");  // assignment operator
+//     Token* tok_b_else2 = createToken("b");  // left-hand side of addition
+//     Token* tok_plus_else = createToken("+");// addition operator
+//     Token* tok_1_else   = createToken("1");  // right-hand side of addition
 
-//     // --- Print the tree structure ---
-//     printf("Printing syntax tree for expression '1 + 2':\n");
-//     printSyntaxTree(exprNode, 0);
+//     // -------------------------------
+//     // Build the AST for each part.
+//     // -------------------------------
 
-//     // --- Clean up memory ---
-//     freeSyntaxTree(exprNode);
-    
+//     // 1. Condition Node for "a < b"
+//     // Create a nonterminal node for the condition with 3 children: [a] [<] [b]
+//     SyntaxTreeNode* condNode = createNonTerminalNode(101, 3);
+//     setChild(condNode, 0, createTerminalNode(tok_a_cond));
+//     setChild(condNode, 1, createTerminalNode(tok_lt));
+//     setChild(condNode, 2, createTerminalNode(tok_b_cond));
+
+//     // 2. Then Branch: Assignment "a = a + 1"
+//     // Create a nonterminal node for the assignment (symbolID 102) with 3 children.
+//     SyntaxTreeNode* thenAssign = createNonTerminalNode(102, 3);
+//     // Left-hand side (variable "a")
+//     setChild(thenAssign, 0, createTerminalNode(tok_a_then1));
+//     // Assignment operator "="
+//     setChild(thenAssign, 1, createTerminalNode(tok_eq_then));
+
+//     // Right-hand side: an addition expression "a + 1"
+//     // Create a nonterminal node for addition (symbolID 103) with 3 children.
+//     SyntaxTreeNode* addExprThen = createNonTerminalNode(103, 3);
+//     setChild(addExprThen, 0, createTerminalNode(tok_a_then2));
+//     setChild(addExprThen, 1, createTerminalNode(tok_plus_then));
+//     setChild(addExprThen, 2, createTerminalNode(tok_1_then));
+//     // Link the addition expression as the right-hand side of the assignment.
+//     setChild(thenAssign, 2, addExprThen);
+
+//     // 3. Else Branch: Assignment "b = b + 1"
+//     // Create a nonterminal node for the assignment (symbolID 104) with 3 children.
+//     SyntaxTreeNode* elseAssign = createNonTerminalNode(104, 3);
+//     // Left-hand side (variable "b")
+//     setChild(elseAssign, 0, createTerminalNode(tok_b_else1));
+//     // Assignment operator "="
+//     setChild(elseAssign, 1, createTerminalNode(tok_eq_else));
+
+//     // Right-hand side: an addition expression "b + 1"
+//     // Create a nonterminal node for addition (symbolID 105) with 3 children.
+//     SyntaxTreeNode* addExprElse = createNonTerminalNode(105, 3);
+//     setChild(addExprElse, 0, createTerminalNode(tok_b_else2));
+//     setChild(addExprElse, 1, createTerminalNode(tok_plus_else));
+//     setChild(addExprElse, 2, createTerminalNode(tok_1_else));
+//     // Link the addition expression as the right-hand side of the assignment.
+//     setChild(elseAssign, 2, addExprElse);
+
+//     // 4. Build the If-Statement Node
+//     // Create a nonterminal node for the if-statement (symbolID 100) with 3 children:
+//     // [condition] [then branch] [else branch]
+//     SyntaxTreeNode* ifStmt = createNonTerminalNode(100, 3);
+//     setChild(ifStmt, 0, condNode);
+//     setChild(ifStmt, 1, thenAssign);
+//     setChild(ifStmt, 2, elseAssign);
+
+//     // -------------------------------
+//     // Print and free the AST.
+//     // -------------------------------
+//     printf("Printing syntax tree for the if-statement:\n");
+//     printSyntaxTree(ifStmt, 0);
+
+//     // Clean up all allocated memory in the tree.
+//     freeSyntaxTree(ifStmt);
+
 //     return 0;
 // }
+
