@@ -213,13 +213,13 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
     {
         for (int i = 0; i < GRAMMAR_SIZE; i++)
         {
-            if (accessVectorOfVector(gmr, i, 0) == n)
+            if (accessVectorOfVector(gmr->Grammar, i, 0) == n)
             {
-                if (accessVectorOfVector(gmr, i, 1) > NONTERMINALS)
+                if (accessVectorOfVector(gmr->Grammar, i, 1) > NONTERMINALS)
                 {
-                    if (!checker(buffer, accessVectorOfVector(gmr, i, 1)))
+                    if (!checker(buffer, accessVectorOfVector(gmr->Grammar, i, 1)))
                     {
-                        buffer[j++] = accessVectorOfVector(gmr, i, 1);
+                        buffer[j++] = accessVectorOfVector(gmr->Grammar, i, 1);
                     }
                 }
                 else
@@ -227,19 +227,19 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
                     int epsn = 0;
                     for (int k = 1; k < 12; k++)
                     {
-                        if (accessVectorOfVector(gmr, i, k) == -1)
+                        if (accessVectorOfVector(gmr->Grammar, i, k) == -1)
                             break;
                         epsn = 0;
-                        FirstSet(accessVectorOfVector(gmr, i, k), gmr, FF->firstset[accessVectorOfVector(gmr, i, k)], FF);
-                        for (int l = 0; FF->firstset[accessVectorOfVector(gmr, i, k)][l] != 0; l++)
+                        FirstSet(accessVectorOfVector(gmr->Grammar, i, k), gmr, FF->firstset[accessVectorOfVector(gmr->Grammar, i, k)], FF);
+                        for (int l = 0; FF->firstset[accessVectorOfVector(gmr->Grammar, i, k)][l] != 0; l++)
                         {
-                            if (FF->firstset[accessVectorOfVector(gmr, i, k)][l] == EPSILON)
+                            if (FF->firstset[accessVectorOfVector(gmr->Grammar, i, k)][l] == EPSILON)
                                 epsn = 1;
                             else
                             {
-                                if (!checker(buffer, FF->firstset[accessVectorOfVector(gmr, i, k)][l]))
+                                if (!checker(buffer, FF->firstset[accessVectorOfVector(gmr->Grammar, i, k)][l]))
                                 {
-                                    buffer[j++] = FF->firstset[accessVectorOfVector(gmr, i, k)][l];
+                                    buffer[j++] = FF->firstset[accessVectorOfVector(gmr->Grammar, i, k)][l];
                                 }
                             }
                         }
@@ -273,38 +273,38 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
     {
         for (int p = 1; p < 12; p++)
         {
-            if (accessVectorOfVector(gmr,i,p) == -1)
+            if (accessVectorOfVector(gmr->Grammar,i,p) == -1)
                 break;
-            if (accessVectorOfVector(gmr,i,p) == n)
+            if (accessVectorOfVector(gmr->Grammar,i,p) == n)
             {
-                for (k = p + 1; accessVectorOfVector(gmr,i,k) != -1; k++)
+                for (k = p + 1; accessVectorOfVector(gmr->Grammar,i,k) != -1; k++)
                 {
                     int epsn = 0;
-                    for (int l = 0; FF->firstset[accessVectorOfVector(gmr,i,k)][l] != 0; l++)
+                    for (int l = 0; FF->firstset[accessVectorOfVector(gmr->Grammar,i,k)][l] != 0; l++)
                     {
-                        if (FF->firstset[accessVectorOfVector(gmr,i,k)][l] == EPSILON)
+                        if (FF->firstset[accessVectorOfVector(gmr->Grammar,i,k)][l] == EPSILON)
                             epsn = 1;
                         else
                         {
-                            if (!checker(buffer, FF->firstset[accessVectorOfVector(gmr,i,k)][l]))
+                            if (!checker(buffer, FF->firstset[accessVectorOfVector(gmr->Grammar,i,k)][l]))
                             {
-                                buffer[j++] = FF->firstset[accessVectorOfVector(gmr,i,k)][l];
+                                buffer[j++] = FF->firstset[accessVectorOfVector(gmr->Grammar,i,k)][l];
                             }
                         }
                     }
                     if (!epsn)
                         break;
                 }
-                if (accessVectorOfVector(gmr,i,k) == -1 && accessVectorOfVector(gmr,i,0) != n)
+                if (accessVectorOfVector(gmr->Grammar,i,k) == -1 && accessVectorOfVector(gmr->Grammar,i,0) != n)
                 {
-                    check[accessVectorOfVector(gmr,i,0)] = 1;
-                    Follow(accessVectorOfVector(gmr,i,0), gmr, FF->followset[accessVectorOfVector(gmr,i,0)], FF, check);
-                    check[accessVectorOfVector(gmr,i,0)] = 0;
-                    for (int l = 0; FF->followset[accessVectorOfVector(gmr,i,0)][l] != 0; l++)
+                    check[accessVectorOfVector(gmr->Grammar,i,0)] = 1;
+                    FollowSet(accessVectorOfVector(gmr->Grammar,i,0), gmr, FF->followset[accessVectorOfVector(gmr->Grammar,i,0)], FF, check);
+                    check[accessVectorOfVector(gmr->Grammar,i,0)] = 0;
+                    for (int l = 0; FF->followset[accessVectorOfVector(gmr->Grammar,i,0)][l] != 0; l++)
                     {
-                        if (!checker(buffer, FF->followset[accessVectorOfVector(gmr,i,0)][l]))
+                        if (!checker(buffer, FF->followset[accessVectorOfVector(gmr->Grammar,i,0)][l]))
                         {
-                            buffer[j++] = FF->followset[accessVectorOfVector(gmr,i,0)][l];
+                            buffer[j++] = FF->followset[accessVectorOfVector(gmr->Grammar,i,0)][l];
                         }
                     }
                 }
