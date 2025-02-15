@@ -1,7 +1,10 @@
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "parser.h"
-#include<vectorofvector.h>
+#include "vectorofvector.h"
 
 grammar G;
 First_Follow F;
@@ -170,6 +173,74 @@ void printVectorOfVector(VectorOfVector *vv) {
 }
 
 
+// Function to print Grammar
+void print_grammar(grammar G)
+{
+    for (int i = 0; i < GRAMMAR_SIZE; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            if (accessVectorOfVector(G->Grammar,i,j) == -1)
+            {
+                printf("\n");
+                break;
+            }
+            if (j == 0)
+            {
+                printf("<%s> ===> ", grammarTerms[accessVectorOfVector(G->Grammar,i,j)]);
+            }
+            else
+            {
+                if (grammarTerms[accessVectorOfVector(G->Grammar,i,j)][0] == 'T' || accessVectorOfVector(G->Grammar,i,j) == EPSILON)
+                    printf("%s ", grammarTerms[accessVectorOfVector(G->Grammar,i,j)]);
+                else
+                    printf("<%s> ", grammarTerms[accessVectorOfVector(G->Grammar,i,j)]);
+            }
+        }
+    }
+}
+
+
+// Function to print the first set of grammar terms
+void print_first_set(First_Follow F, grammar G)
+{
+    printf("\n");
+    for (int i = 0; i < TERMS_SIZE; i++)
+    {
+        printf("%s ===> ", grammarTerms[i]);
+        for (int j = 0; j < 20; j++)
+        {
+            if (F->firstset[i][j] == 0)
+                break;
+            else
+                printf("%s, ", grammarTerms[F->firstset[i][j]]);
+        }
+        printf("\n");
+    }
+}
+
+// FUnction to print the follow set of non terminals
+void print_follow_set(First_Follow F, grammar G)
+{
+    printf("\n");
+    for (int i = NONTERMINALS_START; i < NONTERMINALS_END; i++)
+    {
+        printf("%s ===> ", grammarTerms[i]);
+        for (int j = 0; j < 100; j++)
+        {
+            if (F->followset[i][j] == 0)
+                break;
+            else if (F->followset[i][j] == -1)
+                printf("$, ");
+            else
+                printf("%s, ", grammarTerms[F->followset[i][j]]);
+        }
+        printf("\n");
+    }
+}
+
+
+
 // checks if term is already present
 int checker(int *temp, int n)
 {
@@ -187,17 +258,8 @@ int checker(int *temp, int n)
 }
 
 
-/**
- * @brief Computes the FOLLOW set for a given non-terminal in a grammar.
- * 
- * @param n The non-terminal whose FOLLOW set is being computed.
- * @param gmr The given grammar, stored as a structured data type.
- * @param buffer An array that temporarily stores the FOLLOW set of n.
- * @param FF A structure containing:
- *        - F->firstset: FIRST sets for each non-terminal.
- *        - F->followset: FOLLOW sets for each non-terminal.
- * @param check A flag array used to prevent infinite recursion.
- */
+
+
 void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
 {
     int j = 0;
@@ -209,7 +271,7 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
             break;
         }
     }
-    if (n > NONTERMINALS)
+    if (n < NONTERMINALS_START || n==EPSILON)//if n is a terminal
     {
         buffer[j] = n;
     }
@@ -217,20 +279,21 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
     {
         for (int i = 0; i < GRAMMAR_SIZE; i++)
         {
-            if (accessVectorOfVector(gmr->Grammar, i, 0) == n)
+            if (accessVectorOfVector(gmr->Grammar, i, 0) == n)// if left hand side matches with n
             {
-                if (accessVectorOfVector(gmr->Grammar, i, 1) > NONTERMINALS)
+                if (accessVectorOfVector(gmr->Grammar, i, 1) <= 56 || accessVectorOfVector(gmr->Grammar, i, 1) == 110)//if right side has a terminal
                 {
-                    if (!checker(buffer, accessVectorOfVector(gmr->Grammar, i, 1)))
+                    if (!checker(buffer, accessVectorOfVector(gmr->Grammar, i, 1)))// to ensure no duplicate
                     {
                         buffer[j++] = accessVectorOfVector(gmr->Grammar, i, 1);
                     }
                 }
                 else
-                {
+                {   
+                   
                     int epsn = 0;
-                    for (int k = 1; k < 12; k++)
-                    {
+                    for (int k = 1; k < 10; k++)
+                    {   
                         if (accessVectorOfVector(gmr->Grammar, i, k) == -1)
                             break;
                         epsn = 0;
@@ -247,7 +310,8 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
                                 }
                             }
                         }
-                        if (!epsn)
+                        
+                        if (epsn!=1)
                             break;
                     }
                     if (epsn)
@@ -261,7 +325,7 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
 }
 
 
- void FollowSet(int n, grammar gmr, int buffer[150], First_Follow FF, int check[NONTERMINALS])
+ void FollowSet(int n, grammar gmr, int buffer[150], First_Follow FF, int check[111])
 {
     int j = 0, k;
     if (check[n] == 1)
@@ -337,8 +401,15 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
     {
         FirstSet(i, G, F->firstset[i], F);
     }
-    F->followset = (int **)malloc((NONTERMINALS + 1) * sizeof(int *));
-    for (int i = 1; i <= NONTERMINALS; i++)
+    F->followset = (int **)malloc(TERMS_SIZE * sizeof(int *));
+
+    for (int i = 1; i < NONTERMINALS_START; i++)
+    {
+        F->followset[i] = NULL;
+    }
+    
+
+    for (int i = NONTERMINALS_START; i < NONTERMINALS_END; i++)
     {
         F->followset[i] = (int *)malloc(20 * sizeof(int));
         for (int j = 0; j < 20; j++)
@@ -346,12 +417,11 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
             F->followset[i][j] = 0;
         }
     }
-    int check[NONTERMINALS] = {0};
+    int check[111] = {0};
     int passes = 1;
     while (passes != 6)
     {
-
-        for (int i = 1; i <= NONTERMINALS; i++)
+        for (int i = NONTERMINALS_START; i < NONTERMINALS_END; i++)
         {
             FollowSet(i, G, F->followset[i], F, check);
         }
@@ -361,13 +431,39 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
 }
 
 
+void freeFirstandFollow(First_Follow F)
+{
+    for (int i = 0; i < TERMS_SIZE; i++)
+    {
+        free(F->firstset[i]);
+    }
+    free(F->firstset);
+    for (int i = 0; i <= NONTERMINALS; i++)
+    {
+        free(F->followset[i]);
+    }
+    free(F->followset);
+    free(F);
+}
+
+
+// Frees the memory allocated to the grammar
+void freeGrammar(grammar G)
+{
+    for (int i = 0; i < GRAMMAR_SIZE; i++)
+    {
+        free(accessVector(G->Grammar,i));
+    }
+    free(G->Grammar);
+    free(G);
+}
 
 /**
  * @brief Initializes the grammar for the parser.
  *
  * @return Pointer to the initialized VectorOfVector representing the grammar.
  */
-grammar *initialize_grammar() {
+grammar initialize_grammar() {
     VectorOfVector *gr = (VectorOfVector *)malloc(sizeof(VectorOfVector));
     if (!gr) {
         fprintf(stderr, "Memory allocation error in initialize_grammar\n");
@@ -1341,7 +1437,7 @@ grammar *initialize_grammar() {
         pushBackVector(gr, prod);
     }
 
-    grammar G = (grammar *)malloc(sizeof(grammar));
+    grammar G = (grammar)malloc(sizeof(grammar));
     G->Grammar = (VectorOfVector *)malloc(sizeof(VectorOfVector));
     initVectorOfVector(G->Grammar);
 
@@ -1365,24 +1461,45 @@ return G;
 
 // TODO: Remove this main function before submitting the assignment.
 // this main function is just for testing the grammar initialization.
-int parser_main()
-{
-    // Initialize the grammar.
-    // FILE *fp = fopen("test.txt", "a+");
-    VectorOfVector *grammar = initialize_grammar();
-
-    // Print the grammar using the printVectorOfVector function.
-    printf("Grammar Productions:\n");
-    printVectorOfVector(grammar);
-
-    // Example: Access the element at production index 'i' and element index 'j'.
-    int i = 0, j = 1; // Change these indices as needed.
-    int element = accessVectorOfVector(grammar, i, j);
-    printf("Element at production %d, index %d: %d\n", i, j, element);
-
-    // Free the allocated memory.
-    freeVectorOfVector(grammar);
-    free(grammar);
-
+int main() {
+    // char *testFile = "testcase.txt";
+    // char *outputFile = "output.txt";
+    
+    printf("Initializing grammar...\n");
+    grammar G = initialize_grammar();
+    // print_grammar(G);
+    
+    printf("Computing FIRST and FOLLOW sets...\n");
+    First_Follow F = ComputeFirstAndFollowSets(G);
+    // printf("hello this is testing of first");
+    // print_first_set(F, G);
+    printf("hello this is testing of follow");
+    print_follow_set(F, G);
+    
+    // printf("Initializing parse table...\n");
+    // table T = initialize_table(F);
+    // createParseTable(F, T);
+    // printTable(T);
+    
+    // printf("Parsing input source code...\n");
+    // parseTree root = parseInputSourceCode(testFile, T);
+    // printParseTree(root, outputFile);
+    
+    // printf("Testing stack operations...\n");
+    // Stack *s = newStack();
+    // parseTree node = createNewNode();
+    // push(s, node);
+    // print_stack(s);
+    // pop(s);
+    // printf("Stack empty: %d\n", isEmpty(s));
+    
+    printf("Freeing allocated memory...\n");
+    // freeParseTree(root);
+    freeFirstandFollow(F);
+    // freeTable(T);
+    freeGrammar(G);
+    // freeDataStructures();
+    
+    printf("Testing complete!\n");
     return 0;
 }
