@@ -5,6 +5,7 @@
 #define TERMINALS 53      // Changed from 57
 #define TERMS_SIZE 110     // Changed from 111
 #define EPLS 109          // Changed from 110
+#define Grammer 94
 // Terminals
 "TK_MAIN",                  // 0
 "TK_END",                   // 1
@@ -117,3 +118,5 @@
 "definetypestmt",           // 107
 "A",                        // 108
 "eps",                      // 109 (for epsilon productions)
+#endif
+
