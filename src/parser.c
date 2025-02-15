@@ -165,6 +165,68 @@ void printVectorOfVector(VectorOfVector *vv) {
     printf("]\n");
 }
 
+
+// Computes the FOLLOW set of a term
+void Follow(int n, grammar G, int temp_array[100], FirstAndFollow F, int check_recursion[NONTERMINALS])
+{
+    int j = 0, k;
+    if (check_recursion[n] == 1)
+    {
+        check_recursion[n] = 0;
+        return;
+    }
+    if (n == 1)
+    {
+        temp_array[j++] = -1;
+    }
+    for (int i = 0; i < GRAMMAR_SIZE; i++)
+    {
+        for (int m = 1; m < 10; m++)
+        {
+            if (accessVectorOfVector(G,i,m) == -1)
+                break;
+            if (accessVectorOfVector(G,i,m) == n)
+            {
+                for (k = m + 1; accessVectorOfVector(G,i,k) != -1; k++)
+                {
+                    int flag = 0;
+                    for (int l = 0; F->first[accessVectorOfVector(G,i,k)][l] != 0; l++)
+                    {
+                        if (F->first[accessVectorOfVector(G,i,k)][l] == EPSN)
+                            flag = 1;
+                        else
+                        {
+                            if (!check_term(temp_array, F->first[accessVectorOfVector(G,i,k)][l]))
+                            {
+                                temp_array[j++] = F->first[accessVectorOfVector(G,i,k)][l];
+                            }
+                        }
+                    }
+                    if (flag != 1)
+                        break;
+                }
+                if (accessVectorOfVector(G,i,k) == -1 && accessVectorOfVector(G,i,0) != n)
+                {
+                    check_recursion[accessVectorOfVector(G,i,0)] = 1;
+                    Follow(accessVectorOfVector(G,i,0), G, F->follow[accessVectorOfVector(G,i,0)], F, check_recursion);
+                    check_recursion[accessVectorOfVector(G,i,0)] = 0;
+                    for (int l = 0; F->follow[accessVectorOfVector(G,i,0)][l] != 0; l++)
+                    {
+                        if (!check_term(temp_array, F->follow[accessVectorOfVector(G,i,0)][l]))
+                        {
+                            temp_array[j++] = F->follow[accessVectorOfVector(G,i,0)][l];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
 /**
  * @brief Initializes the grammar for the parser.
  *
