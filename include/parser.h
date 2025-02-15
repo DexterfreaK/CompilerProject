@@ -17,5 +17,6 @@ int parser_main();
 int checker(int *temp, int n);
 
 //Computes the FOLLOW set for a given non-terminal in a grammar.
+void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF);
 void FollowSet(int n, grammar gmr, int buffer[150], First_Follow FF, int check[NONTERMINALS]);
 #endif // PARSER_H

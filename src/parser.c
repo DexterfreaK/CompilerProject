@@ -194,7 +194,70 @@ int checker(int *temp, int n)
  *        - F->followset: FOLLOW sets for each non-terminal.
  * @param check A flag array used to prevent infinite recursion.
  */
-void FollowSet(int n, grammar gmr, int buffer[150], First_Follow FF, int check[NONTERMINALS])
+void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
+{
+    int j = 0;
+    for (int i = 0; i < 150; i++)
+    {
+        if (buffer[i] == 0)
+        {
+            j = i;
+            break;
+        }
+    }
+    if (n > NONTERMINALS)
+    {
+        buffer[j] = n;
+    }
+    else
+    {
+        for (int i = 0; i < GRAMMAR_SIZE; i++)
+        {
+            if (accessVectorOfVector(gmr, i, 0) == n)
+            {
+                if (accessVectorOfVector(gmr, i, 1) > NONTERMINALS)
+                {
+                    if (!checker(buffer, accessVectorOfVector(gmr, i, 1)))
+                    {
+                        buffer[j++] = accessVectorOfVector(gmr, i, 1);
+                    }
+                }
+                else
+                {
+                    int epsn = 0;
+                    for (int k = 1; k < 12; k++)
+                    {
+                        if (accessVectorOfVector(gmr, i, k) == -1)
+                            break;
+                        epsn = 0;
+                        FirstSet(accessVectorOfVector(gmr, i, k), gmr, FF->firstset[accessVectorOfVector(gmr, i, k)], FF);
+                        for (int l = 0; FF->firstset[accessVectorOfVector(gmr, i, k)][l] != 0; l++)
+                        {
+                            if (FF->firstset[accessVectorOfVector(gmr, i, k)][l] == EPSILON)
+                                epsn = 1;
+                            else
+                            {
+                                if (!checker(buffer, FF->firstset[accessVectorOfVector(gmr, i, k)][l]))
+                                {
+                                    buffer[j++] = FF->firstset[accessVectorOfVector(gmr, i, k)][l];
+                                }
+                            }
+                        }
+                        if (!epsn)
+                            break;
+                    }
+                    if (epsn)
+                    {
+                        buffer[j++] = EPSILON;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+ void FollowSet(int n, grammar gmr, int buffer[150], First_Follow FF, int check[NONTERMINALS])
 {
     int j = 0, k;
     if (check[n] == 1)
@@ -268,7 +331,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
     }
     for (int i = 1; i < TERMS_SIZE; i++)
     {
-        First(i, G, F->firstset[i], F);
+        FirstSet(i, G, F->firstset[i], F);
     }
     F->followset = (int **)malloc((NONTERMINALS + 1) * sizeof(int *));
     for (int i = 1; i <= NONTERMINALS; i++)
