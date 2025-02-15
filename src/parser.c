@@ -363,7 +363,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
  *
  * @return Pointer to the initialized VectorOfVector representing the grammar.
  */
-VectorOfVector *initialize_grammar() {
+ VectorOfVector *initialize_grammar() {
     VectorOfVector *grammar = (VectorOfVector *)malloc(sizeof(VectorOfVector));
     if (!grammar) {
         fprintf(stderr, "Memory allocation error in initialize_grammar\n");
@@ -371,948 +371,975 @@ VectorOfVector *initialize_grammar() {
     }
     initVectorOfVector(grammar);
 
-    // Production 0: <program> ===> <otherFunctions> <mainFunction>
+    // Production 1: <program> ===> <otherFunctions> <mainFunction>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 1);
-        pushBack(&prod, 2);
-        pushBack(&prod, 3);
+        pushBack(&prod, 57);  // program
+        pushBack(&prod, 58);  // otherFunctions
+        pushBack(&prod, 59);  // mainFunction
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 1: <mainFunction> ===> TK_MAIN <stmts> TK_END
+    // Production 2: <mainFunction> ===> TK_MAIN <stmts> TK_END
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 3);
-        pushBack(&prod, 69);
-        pushBack(&prod, 4);
-        pushBack(&prod, 62);
+        pushBack(&prod, 59);  // mainFunction
+        pushBack(&prod, 1);   // TK_MAIN
+        pushBack(&prod, 68);  // stmts
+        pushBack(&prod, 2);   // TK_END
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 2: <otherFunctions> ===> <function> <otherFunctions>
+    // Production 3: <otherFunctions> ===> <function> <otherFunctions>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 2);
-        pushBack(&prod, 5);
-        pushBack(&prod, 2);
+        pushBack(&prod, 58);  // otherFunctions
+        pushBack(&prod, 60);  // function
+        pushBack(&prod, 58);  // otherFunctions
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 3: <otherFunctions> ===> eps
+    // Production 4: <otherFunctions> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 2);
-        pushBack(&prod, 110);
+        pushBack(&prod, 58);   // otherFunctions
+        pushBack(&prod, 110);  // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 4: <function> ===> TK_FUNID <input_par> <output_par> TK_SEM <stmts> TK_END
+    // Production 5: <function> ===> TK_FUNID <input_par> <output_par> TK_SEM <stmts> TK_END
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 5);
-        pushBack(&prod, 58);
-        pushBack(&prod, 6);
-        pushBack(&prod, 7);
-        pushBack(&prod, 80);
-        pushBack(&prod, 4);
-        pushBack(&prod, 62);
+        pushBack(&prod, 60);  // function
+        pushBack(&prod, 3);   // TK_FUNID
+        pushBack(&prod, 61);  // input_par
+        pushBack(&prod, 62);  // output_par
+        pushBack(&prod, 4);   // TK_SEM
+        pushBack(&prod, 68);  // stmts
+        pushBack(&prod, 2);   // TK_END
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 5: <input_par> ===> TK_INPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
+    // Production 6: <input_par> ===> TK_INPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 6);
-        pushBack(&prod, 75);
-        pushBack(&prod, 71);
-        pushBack(&prod, 72);
-        pushBack(&prod, 73);
-        pushBack(&prod, 8);
-        pushBack(&prod, 74);
+        pushBack(&prod, 61);  // input_par
+        pushBack(&prod, 5);   // TK_INPUT
+        pushBack(&prod, 6);   // TK_PARAMETER
+        pushBack(&prod, 7);   // TK_LIST
+        pushBack(&prod, 8);   // TK_SQL
+        pushBack(&prod, 63);  // parameter_list
+        pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 6: <output_par> ===> TK_OUTPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
+    // Production 7: <output_par> ===> TK_OUTPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 7);
-        pushBack(&prod, 76);
-        pushBack(&prod, 71);
-        pushBack(&prod, 72);
-        pushBack(&prod, 73);
-        pushBack(&prod, 8);
-        pushBack(&prod, 74);
+        pushBack(&prod, 62);  // output_par
+        pushBack(&prod, 10);  // TK_OUTPUT
+        pushBack(&prod, 6);   // TK_PARAMETER
+        pushBack(&prod, 7);   // TK_LIST
+        pushBack(&prod, 8);   // TK_SQL
+        pushBack(&prod, 63);  // parameter_list
+        pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 7: <output_par> ===> eps
+    // Production 8: <output_par> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 7);
-        pushBack(&prod, 110);
+        pushBack(&prod, 62);  // output_par
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 8: <parameter_list> ===> <dataType> TK_ID <remaining_list>
+    // Production 9: <parameter_list> ===> <dataType> TK_ID <remaining_list>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 8);
-        pushBack(&prod, 9);
-        pushBack(&prod, 55);
-        pushBack(&prod, 31);
+        pushBack(&prod, 63);  // parameter_list
+        pushBack(&prod, 64);  // dataType
+        pushBack(&prod, 56);  // TK_ID
+        pushBack(&prod, 67);  // remaining_list
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 9: <dataType> ===> <primitiveDatatype>
+    // Production 10: <dataType> ===> <primitiveDataType>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 9);
-        pushBack(&prod, 10);
+        pushBack(&prod, 64);  // dataType
+        pushBack(&prod, 65);  // primitiveDataType
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 10: <dataType> ===> <constructedDatatype>
+    // Production 11: <dataType> ===> <constructedDataType>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 9);
-        pushBack(&prod, 11);
+        pushBack(&prod, 64);  // dataType
+        pushBack(&prod, 66);  // constructedDataType
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 11: <primitiveDatatype> ===> TK_INT
+    // Production 12: <primitiveDataType> ===> TK_INT
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 10);
-        pushBack(&prod, 77);
+        pushBack(&prod, 65);  // primitiveDataType
+        pushBack(&prod, 11);  // TK_INT
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 12: <primitiveDatatype> ===> TK_REAL
+    // Production 13: <primitiveDataType> ===> TK_REAL
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 10);
-        pushBack(&prod, 78);
+        pushBack(&prod, 65);  // primitiveDataType
+        pushBack(&prod, 12);  // TK_REAL
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 13: <constructedDatatype> ===> <A> TK_RUID
+    // Production 14: <constructedDataType> ===> <A> TK_RUID
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 11);
-        pushBack(&prod, 12);
-        pushBack(&prod, 59);
+        pushBack(&prod, 66);  // constructedDataType
+        pushBack(&prod, 109); // A
+        pushBack(&prod, 13);  // TK_RUID
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 14: <constructedDatatype> ===> TK_RUID
+    // Production 15: <constructedDataType> ===> TK_RUID
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 11);
-        pushBack(&prod, 59);
+        pushBack(&prod, 66);  // constructedDataType
+        pushBack(&prod, 13);  // TK_RUID
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 15: <remaining_list> ===> TK_COMMA <parameter_list>
+    // Production 16: <remaining_list> ===> TK_COMMA <parameter_list>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 31);
-        pushBack(&prod, 79);
-        pushBack(&prod, 8);
+        pushBack(&prod, 67);  // remaining_list
+        pushBack(&prod, 14);  // TK_COMMA
+        pushBack(&prod, 63);  // parameter_list
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 16: <remaining_list> ===> eps
+    // Production 17: <remaining_list> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 31);
-        pushBack(&prod, 110);
+        pushBack(&prod, 67);  // remaining_list
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 17: <stmts> ===> <typeDefinitions> <declarations> <otherStmts> <returnStmt>
+    // Production 18: <stmts> ===> <typeDefinitions> <declarations> <otherStmts> <returnStmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 4);
-        pushBack(&prod, 13);
-        pushBack(&prod, 14);
-        pushBack(&prod, 15);
-        pushBack(&prod, 16);
+        pushBack(&prod, 68);  // stmts
+        pushBack(&prod, 69);  // typeDefinitions
+        pushBack(&prod, 76);  // declarations
+        pushBack(&prod, 79);  // otherStmts
+        pushBack(&prod, 104); // returnStmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 18: <typeDefinitions> ===> <typeDefinition> <typedefinitions>
+    // Production 19: <typeDefinitions> ===> <actualOrRedefined> <typeDefinitions>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 13);
-        pushBack(&prod, 17);
-        pushBack(&prod, 13);
+        pushBack(&prod, 69);  // typeDefinitions
+        pushBack(&prod, 70);  // actualOrRedefined
+        pushBack(&prod, 69);  // typeDefinitions
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 19: <typeDefinitions> ===> <definetypestmt> <typeDefinitions>
+    // Production 20: <typeDefinitions> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 13);
-        pushBack(&prod, 18);
-        pushBack(&prod, 13);
+        pushBack(&prod, 69);  // typeDefinitions
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 20: <typeDefinitions> ===> eps
+    // Production 21: <actualOrRedefined> ===> <typeDefinition>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 13);
-        pushBack(&prod, 110);
+        pushBack(&prod, 70);  // actualOrRedefined
+        pushBack(&prod, 71);  // typeDefinition
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 21: <typeDefinition> ===> TK_RECORD TK_RUID <fieldDefinitions> TK_ENDRECORD
+    // Production 22: <actualOrRedefined> ===> <definetypestmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 17);
-        pushBack(&prod, 97);
-        pushBack(&prod, 59);
-        pushBack(&prod, 19);
-        pushBack(&prod, 98);
+        pushBack(&prod, 70);  // actualOrRedefined
+        pushBack(&prod, 108); // definetypestmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 22: <typeDefinition> ===> TK_UNION TK_RUID <fieldDefinitions> TK_ENDUNION
+    // Production 23: <typeDefinition> ===> TK_RECORD TK_RUID <fieldDefinitions> TK_ENDRECORD
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 17);
-        pushBack(&prod, 64);
-        pushBack(&prod, 59);
-        pushBack(&prod, 19);
-        pushBack(&prod, 65);
+        pushBack(&prod, 71);  // typeDefinition
+        pushBack(&prod, 15);  // TK_RECORD
+        pushBack(&prod, 13);  // TK_RUID
+        pushBack(&prod, 72);  // fieldDefinitions
+        pushBack(&prod, 16);  // TK_ENDRECORD
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 23: <fieldDefinitions> ===> <fieldDefinition> <fieldDefinition> <moreFields>
+    // Production 24: <typeDefinition> ===> TK_UNION TK_RUID <fieldDefinitions> TK_ENDUNION
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 19);
-        pushBack(&prod, 20);
-        pushBack(&prod, 20);
-        pushBack(&prod, 21);
+        pushBack(&prod, 71);  // typeDefinition
+        pushBack(&prod, 17);  // TK_UNION
+        pushBack(&prod, 13);  // TK_RUID
+        pushBack(&prod, 72);  // fieldDefinitions
+        pushBack(&prod, 18);  // TK_ENDUNION
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 24: <fieldDefinition> ===> TK_TYPE <datatype> TK_COLON TK_FIELDID TK_SEM
+    // Production 25: <fieldDefinitions> ===> <fieldDefinition> <fieldDefinition> <moreFields>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 20);
-        pushBack(&prod, 68);
-        pushBack(&prod, 9);
-        pushBack(&prod, 81);
-        pushBack(&prod, 54);
-        pushBack(&prod, 80);
+        pushBack(&prod, 72);  // fieldDefinitions
+        pushBack(&prod, 73);  // fieldDefinition
+        pushBack(&prod, 73);  // fieldDefinition
+        pushBack(&prod, 75);  // moreFields
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 25: <moreFields> ===> <fieldDefinition> <moreFields>
+    // Production 26: <fieldDefinition> ===> TK_TYPE <fieldType> TK_COLON TK_FIELDID TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 21);
-        pushBack(&prod, 20);
-        pushBack(&prod, 21);
+        pushBack(&prod, 73);  // fieldDefinition
+        pushBack(&prod, 19);  // TK_TYPE
+        pushBack(&prod, 74);  // fieldType
+        pushBack(&prod, 20);  // TK_COLON
+        pushBack(&prod, 21);  // TK_FIELDID
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 26: <moreFields> ===> eps
+    // Production 27: <fieldType> ===> <primitiveDataType>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 21);
-        pushBack(&prod, 110);
+        pushBack(&prod, 74);  // fieldType
+        pushBack(&prod, 65);  // primitiveDataType
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 27: <declarations> ===> <declaration> <declarations>
+    // Production 28: <fieldType> ===> <constructedDataType>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 14);
-        pushBack(&prod, 47);
-        pushBack(&prod, 14);
+        pushBack(&prod, 74);  // fieldType
+        pushBack(&prod, 66);  // constructedDataType
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 28: <declarations> ===> eps
+    // Production 29: <moreFields> ===> <fieldDefinition> <moreFields>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 14);
-        pushBack(&prod, 110);
+        pushBack(&prod, 75);  // moreFields
+        pushBack(&prod, 73);  // fieldDefinition
+        pushBack(&prod, 75);  // moreFields
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 29: <declaration> ===> TK_TYPE <dataType> TK_COLON TK_ID <global_or_not> TK_SEM
+    // Production 30: <moreFields> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 47);
-        pushBack(&prod, 68);
-        pushBack(&prod, 9);
-        pushBack(&prod, 81);
-        pushBack(&prod, 55);
-        pushBack(&prod, 22);
-        pushBack(&prod, 80);
+        pushBack(&prod, 75);  // moreFields
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 30: <global_or_not> ===> TK_COLON TK_GLOBAL
+    // Production 31: <declarations> ===> <declaration> <declarations>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 22);
-        pushBack(&prod, 81);
-        pushBack(&prod, 70);
+        pushBack(&prod, 76);  // declarations
+        pushBack(&prod, 77);  // declaration
+        pushBack(&prod, 76);  // declarations
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 31: <global_or_not> ===> eps
+    // Production 32: <declarations> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 22);
-        pushBack(&prod, 110);
+        pushBack(&prod, 76);  // declarations
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 32: <otherStmts> ===> <stmt> <otherStmts>
+    // Production 33: <declaration> ===> TK_TYPE <dataType> TK_COLON TK_ID <global_or_not> TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 15);
-        pushBack(&prod, 23);
-        pushBack(&prod, 15);
+        pushBack(&prod, 77);  // declaration
+        pushBack(&prod, 19);  // TK_TYPE
+        pushBack(&prod, 64);  // dataType
+        pushBack(&prod, 20);  // TK_COLON
+        pushBack(&prod, 56);  // TK_ID
+        pushBack(&prod, 78);  // global_or_not
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 33: <otherStmts> ===> eps
+    // Production 34: <global_or_not> ===> TK_COLON TK_GLOBAL
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 15);
-        pushBack(&prod, 110);
+        pushBack(&prod, 78);  // global_or_not
+        pushBack(&prod, 20);  // TK_COLON
+        pushBack(&prod, 22);  // TK_GLOBAL
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 34: <stmt> ===> <assignmentStmt>
+    // Production 35: <global_or_not> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 23);
-        pushBack(&prod, 24);
+        pushBack(&prod, 78);  // global_or_not
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 35: <stmt> ===> <iterativeStmt>
+    // Production 36: <otherStmts> ===> <stmt> <otherStmts>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 23);
-        pushBack(&prod, 25);
+        pushBack(&prod, 79);  // otherStmts
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 36: <stmt> ===> <conditionalStmt>
+    // Production 37: <otherStmts> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 23);
-        pushBack(&prod, 26);
+        pushBack(&prod, 79);  // otherStmts
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 37: <stmt> ===> <ioStmt>
+    // Production 38: <stmt> ===> <assignmentStmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 23);
-        pushBack(&prod, 27);
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 81);  // assignmentStmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 38: <stmt> ===> <funCallStmt>
+    // Production 39: <stmt> ===> <iterativeStmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 23);
-        pushBack(&prod, 28);
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 89);  // iterativeStmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 39: <assignmentStmt> ===> <SingleOrRecId> TK_ASSIGNOP <arithmeticExpression> TK_SEM
+    // Production 40: <stmt> ===> <conditionalStmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 24);
-        pushBack(&prod, 29);
-        pushBack(&prod, 109);
-        pushBack(&prod, 30);
-        pushBack(&prod, 80);
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 90);  // conditionalStmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 40: <singleOrRecId> ===> TK_ID <option_single_constructed>
+    // Production 41: <stmt> ===> <ioStmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 29);
-        pushBack(&prod, 55);
-        pushBack(&prod, 32);
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 92);  // ioStmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 41: <option_single_constructed> ===> <oneExpansion> <moreExpansions>
+    // Production 42: <stmt> ===> <funCallStmt>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 32);
-        pushBack(&prod, 33);
-        pushBack(&prod, 34);
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 86);  // funCallStmt
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 42: <option_single_constructed> ===> eps
+    // Production 43: <assignmentStmt> ===> <SingleOrRecId> TK_ASSIGNOP <arithmeticExpression> TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 32);
-        pushBack(&prod, 110);
+        pushBack(&prod, 81);  // assignmentStmt
+        pushBack(&prod, 82);  // SingleOrRecId
+        pushBack(&prod, 23);  // TK_ASSIGNOP
+        pushBack(&prod, 93);  // arithmeticExpression
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 43: <moreExpansions> ===> <oneExpansion> <moreExpansions>
+    // Production 44: <SingleOrRecId> ===> TK_ID <option_single_constructed>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 34);
-        pushBack(&prod, 33);
-        pushBack(&prod, 34);
+        pushBack(&prod, 82);  // SingleOrRecId
+        pushBack(&prod, 56);  // TK_ID
+        pushBack(&prod, 83);  // option_single_constructed
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 44: <moreExpansions> ===> eps
+    // Production 45: <option_single_constructed> ===> <oneExpansion> <moreExpansions>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 34);
-        pushBack(&prod, 110);
+        pushBack(&prod, 83);  // option_single_constructed
+        pushBack(&prod, 84);  // oneExpansion
+        pushBack(&prod, 85);  // moreExpansions
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 45: <oneExpansion> ===> TK_DOT TK_FIELDID
+    // Production 46: <option_single_constructed> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 33);
-        pushBack(&prod, 82);
-        pushBack(&prod, 54);
+        pushBack(&prod, 83);  // option_single_constructed
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 46: <funCallStmt> ===> <outputParameters> TK_CALL TK_FUNID TK_WITH TK_PARAMETERS <inputParameters> TK_SEM
+    // Production 47: <moreExpansions> ===> <oneExpansion> <moreExpansions>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 28);
-        pushBack(&prod, 35);
-        pushBack(&prod, 96);
-        pushBack(&prod, 58);
-        pushBack(&prod, 60);
-        pushBack(&prod, 61);
-        pushBack(&prod, 36);
-        pushBack(&prod, 80);
+        pushBack(&prod, 85);  // moreExpansions
+        pushBack(&prod, 84);  // oneExpansion
+        pushBack(&prod, 85);  // moreExpansions
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 47: <outputParameters> ===> TK_SQL <idList> TK_SQR TK_ASSIGNOP
+    // Production 48: <moreExpansions> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 35);
-        pushBack(&prod, 73);
-        pushBack(&prod, 37);
-        pushBack(&prod, 74);
-        pushBack(&prod, 109);
+        pushBack(&prod, 85);  // moreExpansions
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 48: <outputParameters> ===> eps
+    // Production 49: <oneExpansion> ===> TK_DOT TK_FIELDID
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 35);
-        pushBack(&prod, 110);
+        pushBack(&prod, 84);  // oneExpansion
+        pushBack(&prod, 49);  // TK_DOT
+        pushBack(&prod, 21);  // TK_FIELDID
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 49: <inputParameters> ===> TK_SQL <idList> TK_SQR
+    // Production 50: <funCallStmt> ===> <outputParameters> TK_CALL TK_FUNID TK_WITH TK_PARAMETERS <inputParameters> TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 36);
-        pushBack(&prod, 73);
-        pushBack(&prod, 37);
-        pushBack(&prod, 74);
+        pushBack(&prod, 86);  // funCallStmt
+        pushBack(&prod, 87);  // outputParameters
+        pushBack(&prod, 50);  // TK_CALL
+        pushBack(&prod, 3);   // TK_FUNID
+        pushBack(&prod, 51);  // TK_WITH
+        pushBack(&prod, 52);  // TK_PARAMETERS
+        pushBack(&prod, 88);  // inputParameters
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 50: <iterativeStmt> ===> TK_WHILE TK_OP <booleanExpression> TK_CL <stmt> <otherStmts> TK_ENDWHILE
+    // Production 51: <outputParameters> ===> TK_SQL <idList> TK_SQR TK_ASSIGNOP
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 25);
-        pushBack(&prod, 63);
-        pushBack(&prod, 84);
-        pushBack(&prod, 38);
-        pushBack(&prod, 85);
-        pushBack(&prod, 23);
-        pushBack(&prod, 15);
-        pushBack(&prod, 83);
+        pushBack(&prod, 87);  // outputParameters
+        pushBack(&prod, 8);   // TK_SQL
+        pushBack(&prod, 106); // idList
+        pushBack(&prod, 9);   // TK_SQR
+        pushBack(&prod, 23);  // TK_ASSIGNOP
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 51: <conditionalStmt> ===> TK_IF TK_OP <booleanExpression> TK_CL TK_THEN <stmt> <otherStmts> <factorConditionalStmt>
+    // Production 52: <outputParameters> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 26);
-        pushBack(&prod, 86);
-        pushBack(&prod, 84);
-        pushBack(&prod, 38);
-        pushBack(&prod, 85);
-        pushBack(&prod, 87);
-        pushBack(&prod, 23);
-        pushBack(&prod, 15);
-        pushBack(&prod, 39);
+        pushBack(&prod, 87);  // outputParameters
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 52: <factorConditionalStmt> ===> TK_ELSE <stmt> <otherStmts> TK_ENDIF
+    // Production 53: <inputParameters> ===> TK_SQL <idList> TK_SQR
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 39);
-        pushBack(&prod, 99);
-        pushBack(&prod, 23);
-        pushBack(&prod, 15);
-        pushBack(&prod, 88);
+        pushBack(&prod, 88);  // inputParameters
+        pushBack(&prod, 8);   // TK_SQL
+        pushBack(&prod, 106); // idList
+        pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 53: <factorConditionalStmt> ===> TK_ELSE <stmt> <otherStmts> TK_ENDIF
+    // Production 54: <iterativeStmt> ===> TK_WHILE TK_OP <booleanExpression> TK_CL <stmt> <otherStmts> TK_ENDWHILE
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 39);
-        pushBack(&prod, 88);
+        pushBack(&prod, 89);  // iterativeStmt
+        pushBack(&prod, 24);  // TK_WHILE
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 26);  // TK_CL
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 79);  // otherStmts
+        pushBack(&prod, 55);  // TK_ENDWHILE
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 54: <ioStmt> ===> TK_READ TK_OP <var> TK_CL TK_SEM
+    // Production 55: <conditionalStmt> ===> TK_IF TK_OP <booleanExpression> TK_CL TK_THEN <stmt> <otherStmts> <elsePart>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 27);
-        pushBack(&prod, 89);
-        pushBack(&prod, 84);
-        pushBack(&prod, 40);
-        pushBack(&prod, 85);
-        pushBack(&prod, 80);
+        pushBack(&prod, 90);  // conditionalStmt
+        pushBack(&prod, 27);  // TK_IF
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 26);  // TK_CL
+        pushBack(&prod, 28);  // TK_THEN
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 79);  // otherStmts
+        pushBack(&prod, 91);  // elsePart
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 55: <ioStmt> ===> TK_WRITE TK_OP <var> TK_CL TK_SEM
+    // Production 56: <elsePart> ===> TK_ELSE <stmt> <otherStmts> TK_ENDIF
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 27);
-        pushBack(&prod, 90);
-        pushBack(&prod, 84);
-        pushBack(&prod, 40);
-        pushBack(&prod, 85);
-        pushBack(&prod, 80);
+        pushBack(&prod, 91);  // elsePart
+        pushBack(&prod, 29);  // TK_ELSE
+        pushBack(&prod, 80);  // stmt
+        pushBack(&prod, 79);  // otherStmts
+        pushBack(&prod, 30);  // TK_ENDIF
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 56: <arithmeticExpression> ===> <arith_term> <arithmatic_recursion>
+    // Production 57: <elsePart> ===> TK_ENDIF
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 30);
-        pushBack(&prod, 41);
-        pushBack(&prod, 42);
+        pushBack(&prod, 91);  // elsePart
+        pushBack(&prod, 30);  // TK_ENDIF
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 57: <arithmatic_recursion> ===> <operator> <arith_term> <arithmatic_recursion>
+    // Production 58: <ioStmt> ===> TK_READ TK_OP <var> TK_CL TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 42);
-        pushBack(&prod, 43);
-        pushBack(&prod, 41);
-        pushBack(&prod, 42);
+        pushBack(&prod, 92);  // ioStmt
+        pushBack(&prod, 31);  // TK_READ
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 101); // var
+        pushBack(&prod, 26);  // TK_CL
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 58: <arithmatic_recursion> ===> eps
+    // Production 59: <ioStmt> ===> TK_WRITE TK_OP <var> TK_CL TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 42);
-        pushBack(&prod, 110);
+        pushBack(&prod, 92);  // ioStmt
+        pushBack(&prod, 32);  // TK_WRITE
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 101); // var
+        pushBack(&prod, 26);  // TK_CL
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 59: <arith_term> ===> <factor> <term_recursion>
+    // Production 60: <arithmeticExpression> ===> <term> <expPrime>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 41);
-        pushBack(&prod, 44);
-        pushBack(&prod, 45);
+        pushBack(&prod, 93);  // arithmeticExpression
+        pushBack(&prod, 95);  // term
+        pushBack(&prod, 94);  // expPrime
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 60: <term_recursion> ===> <operator_second> <factor> <term_recursion>
+    // Production 61: <expPrime> ===> <lowPrecedenceOp> <term> <expPrime>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 45);
-        pushBack(&prod, 46);
-        pushBack(&prod, 44);
-        pushBack(&prod, 45);
+        pushBack(&prod, 94);  // expPrime
+        pushBack(&prod, 98);  // lowPrecedenceOp
+        pushBack(&prod, 95);  // term
+        pushBack(&prod, 94);  // expPrime
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 61: <term_recursion> ===> eps
+    // Production 62: <expPrime> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 45);
-        pushBack(&prod, 110);
+        pushBack(&prod, 94);  // expPrime
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 62: <factor> ===> TK_OP <arithmeticExpression> TK_CL
+    // Production 63: <term> ===> <factor> <termPrime>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 44);
-        pushBack(&prod, 84);
-        pushBack(&prod, 30);
-        pushBack(&prod, 85);
+        pushBack(&prod, 95);  // term
+        pushBack(&prod, 97);  // factor
+        pushBack(&prod, 96);  // termPrime
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 63: <factor> ===> <var>
+    // Production 64: <termPrime> ===> <highPrecedenceOp> <factor> <termPrime>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 44);
-        pushBack(&prod, 40);
+        pushBack(&prod, 96);  // termPrime
+        pushBack(&prod, 99);  // highPrecedenceOp
+        pushBack(&prod, 97);  // factor
+        pushBack(&prod, 96);  // termPrime
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 64: <operator> ===> TK_PLUS
+    // Production 65: <termPrime> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 43);
-        pushBack(&prod, 92);
+        pushBack(&prod, 96);  // termPrime
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 65: <operator> ===> TK_MINUS
+    // Production 66: <factor> ===> TK_OP <arithmeticExpression> TK_CL
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 43);
-        pushBack(&prod, 93);
+        pushBack(&prod, 97);  // factor
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 93);  // arithmeticExpression
+        pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 66: <operator_second> ===> TK_MUL
+    // Production 67: <factor> ===> <var>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 46);
-        pushBack(&prod, 94);
+        pushBack(&prod, 97);  // factor
+        pushBack(&prod, 101); // var
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 67: <operator_second> ===> TK_DIV
+    // Production 68: <lowPrecedenceOp> ===> TK_PLUS
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 46);
-        pushBack(&prod, 95);
+        pushBack(&prod, 98);  // lowPrecedenceOp
+        pushBack(&prod, 33);  // TK_PLUS
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 68: <booleanExpression> ===> TK_OP <booleanExpression> TK_CL <logicalOp> TK_OP <booleanExpression> TK_CL
+    // Production 69: <lowPrecedenceOp> ===> TK_MINUS
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 38);
-        pushBack(&prod, 84);
-        pushBack(&prod, 38);
-        pushBack(&prod, 85);
-        pushBack(&prod, 48);
-        pushBack(&prod, 84);
-        pushBack(&prod, 38);
-        pushBack(&prod, 85);
+        pushBack(&prod, 98);  // lowPrecedenceOp
+        pushBack(&prod, 34);  // TK_MINUS
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 69: <booleanExpression> ===> <var> <relationalOp> <var>
+    // Production 70: <highPrecedenceOp> ===> TK_MUL
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 38);
-        pushBack(&prod, 40);
-        pushBack(&prod, 49);
-        pushBack(&prod, 40);
+        pushBack(&prod, 99);  // highPrecedenceOp
+        pushBack(&prod, 35);  // TK_MUL
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 70: <booleanExpression> ===> TK_NOT TK_OP <booleanExpression> TK_CL
+    // Production 71: <highPrecedenceOp> ===> TK_DIV
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 38);
-        pushBack(&prod, 102);
-        pushBack(&prod, 84);
-        pushBack(&prod, 38);
-        pushBack(&prod, 85);
+        pushBack(&prod, 99);  // highPrecedenceOp
+        pushBack(&prod, 36);  // TK_DIV
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 71: <var> ===> TK_NUM (or TK_RNUM or <singleOrRecId>)
+    // Production 72: <booleanExpression> ===> TK_OP <booleanExpression> TK_CL <logicalOp> TK_OP <booleanExpression> TK_CL
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 40);
-        pushBack(&prod, 56);
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 26);  // TK_CL
+        pushBack(&prod, 102); // logicalOp
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 72: <var> ===> TK_NUM (or TK_RNUM or <singleOrRecId>)
+    // Production 73: <booleanExpression> ===> <var> <relationalOp> <var>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 40);
-        pushBack(&prod, 57);
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 101); // var
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 101); // var
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 73: <var> ===> TK_NUM (or TK_RNUM or <singleOrRecId>)
+    // Production 74: <booleanExpression> ===> TK_NOT TK_OP <booleanExpression> TK_CL
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 40);
-        pushBack(&prod, 29);
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 37);  // TK_NOT
+        pushBack(&prod, 25);  // TK_OP
+        pushBack(&prod, 100); // booleanExpression
+        pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 74: <logicalOp> ===> TK_AND
+    // Production 75: <var> ===> <SingleOrRecId>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 48);
-        pushBack(&prod, 100);
+        pushBack(&prod, 101); // var
+        pushBack(&prod, 82);  // SingleOrRecId
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 75: <logicalOp> ===> TK_OR
+    // Production 76: <var> ===> TK_NUM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 48);
-        pushBack(&prod, 101);
+        pushBack(&prod, 101); // var
+        pushBack(&prod, 53);  // TK_NUM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 76: <relationalOp> ===> TK_LT
+    // Production 77: <var> ===> TK_RNUM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 49);
-        pushBack(&prod, 103);
+        pushBack(&prod, 101); // var
+        pushBack(&prod, 54);  // TK_RNUM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 77: <relationalOp> ===> TK_LE
+    // Production 78: <logicalOp> ===> TK_AND
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 49);
-        pushBack(&prod, 104);
+        pushBack(&prod, 102); // logicalOp
+        pushBack(&prod, 38);  // TK_AND
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 78: <relationalOp> ===> TK_EQ
+    // Production 79: <logicalOp> ===> TK_OR
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 49);
-        pushBack(&prod, 105);
+        pushBack(&prod, 102); // logicalOp
+        pushBack(&prod, 39);  // TK_OR
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 79: <relationalOp> ===> TK_GT
+    // Production 80: <relationalOp> ===> TK_LT
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 49);
-        pushBack(&prod, 106);
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 40);  // TK_LT
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 80: <relationalOp> ===> TK_GE
+    // Production 81: <relationalOp> ===> TK_LE
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 49);
-        pushBack(&prod, 107);
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 41);  // TK_LE
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 81: <relationalOp> ===> TK_NE
+    // Production 82: <relationalOp> ===> TK_EQ
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 49);
-        pushBack(&prod, 108);
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 42);  // TK_EQ
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 82: <returnStmt> ===> TK_RETURN <optionalReturn> TK_SEM
+    // Production 83: <relationalOp> ===> TK_GT
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 16);
-        pushBack(&prod, 91);
-        pushBack(&prod, 50);
-        pushBack(&prod, 80);
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 43);  // TK_GT
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 83: <optionalReturn> ===> TK_SQL <idList> TK_SQR
+    // Production 84: <relationalOp> ===> TK_GE
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 50);
-        pushBack(&prod, 73);
-        pushBack(&prod, 37);
-        pushBack(&prod, 74);
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 44);  // TK_GE
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 84: <optionalReturn> ===> eps
+    // Production 85: <relationalOp> ===> TK_NE
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 50);
-        pushBack(&prod, 110);
+        pushBack(&prod, 103); // relationalOp
+        pushBack(&prod, 45);  // TK_NE
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 85: <idList> ===> TK_ID <more_ids>
+    // Production 86: <returnStmt> ===> TK_RETURN <optionalReturn> TK_SEM
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 37);
-        pushBack(&prod, 55);
-        pushBack(&prod, 51);
+        pushBack(&prod, 104); // returnStmt
+        pushBack(&prod, 46);  // TK_RETURN
+        pushBack(&prod, 105); // optionalReturn
+        pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 86: <more_ids> ===> TK_COMMA <idList>
+    // Production 87: <optionalReturn> ===> TK_SQL <idList> TK_SQR
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 51);
-        pushBack(&prod, 79);
-        pushBack(&prod, 37);
+        pushBack(&prod, 105); // optionalReturn
+        pushBack(&prod, 8);   // TK_SQL
+        pushBack(&prod, 106); // idList
+        pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 87: <more_ids> ===> eps
+    // Production 88: <optionalReturn> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 51);
-        pushBack(&prod, 110);
+        pushBack(&prod, 105); // optionalReturn
+        pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 88: <definetypestmt> ===> TK_DEFINETYPE <A> TK_RUID TK_AS TK_RUID
+    // Production 89: <idList> ===> TK_ID <more_ids>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 18);
-        pushBack(&prod, 66);
-        pushBack(&prod, 12);
-        pushBack(&prod, 59);
-        pushBack(&prod, 67);
-        pushBack(&prod, 59);
+        pushBack(&prod, 106); // idList
+        pushBack(&prod, 56);  // TK_ID
+        pushBack(&prod, 107); // more_ids
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 89: <A> ===> TK_RECORD
+    // Production 90: <more_ids> ===> TK_COMMA <idList>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 12);
-        pushBack(&prod, 97);
+        pushBack(&prod, 107); // more_ids
+        pushBack(&prod, 14);  // TK_COMMA
+        pushBack(&prod, 106); // idList
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
-    // Production 90: <A> ===> TK_UNION
+    // Production 91: <more_ids> ===> <eps>
     {
         Vector prod;
         initVector(&prod);
-        pushBack(&prod, 12);
-        pushBack(&prod, 64);
+        pushBack(&prod, 107); // more_ids
+        pushBack(&prod, 110); // eps
+        pushBack(&prod, -1);
+        pushBackVector(grammar, prod);
+    }
+    // Production 92: <definetypestmt> ===> TK_DEFINETYPE <A> TK_RUID TK_AS TK_RUID
+    {
+        Vector prod;
+        initVector(&prod);
+        pushBack(&prod, 108); // definetypestmt
+        pushBack(&prod, 47);  // TK_DEFINETYPE
+        pushBack(&prod, 109); // A
+        pushBack(&prod, 13);  // TK_RUID
+        pushBack(&prod, 48);  // TK_AS
+        pushBack(&prod, 13);  // TK_RUID
+        pushBack(&prod, -1);
+        pushBackVector(grammar, prod);
+    }
+    // Production 93: <A> ===> TK_RECORD
+    {
+        Vector prod;
+        initVector(&prod);
+        pushBack(&prod, 109); // A
+        pushBack(&prod, 15);  // TK_RECORD
+        pushBack(&prod, -1);
+        pushBackVector(grammar, prod);
+    }
+    // Production 94: <A> ===> TK_UNION
+    {
+        Vector prod;
+        initVector(&prod);
+        pushBack(&prod, 109); // A
+        pushBack(&prod, 17);  // TK_UNION
         pushBack(&prod, -1);
         pushBackVector(grammar, prod);
     }
 
     return grammar;
 }
+
 
 // TODO: Remove this main function before submitting the assignment.
 // this main function is just for testing the grammar initialization.
