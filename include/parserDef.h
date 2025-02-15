@@ -1,4 +1,4 @@
-#include<vectorofvector.h>
+#include "vectorofvector.h"
 struct First_Follow
 {
     int **firstset;
@@ -17,6 +17,8 @@ typedef struct First_Follow *First_Follow;
 #define TERMINALS 57
 #define EPSILON 110
 #define TERMS_SIZE 111
+#define NONTERMINALS_START 57
+#define NONTERMINALS_END 110
 static char *grammarTerms[111] = {
 "$",                         // 0
 //terminals
