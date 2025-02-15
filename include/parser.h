@@ -9,7 +9,7 @@
 
 // Function prototype for initializing the grammar.
 // This creates a VectorOfVector where each production is stored as a Vector.
-VectorOfVector *initialize_grammar();
+grammar *initialize_grammar();
 int parser_main();
 
 

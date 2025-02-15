@@ -3,6 +3,10 @@
 #include "parser.h"
 #include<vectorofvector.h>
 
+grammar G;
+First_Follow F;
+
+
 /**
  * @brief Initializes a Vector.
  *
@@ -363,13 +367,13 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
  *
  * @return Pointer to the initialized VectorOfVector representing the grammar.
  */
- VectorOfVector *initialize_grammar() {
-    VectorOfVector *grammar = (VectorOfVector *)malloc(sizeof(VectorOfVector));
-    if (!grammar) {
+grammar *initialize_grammar() {
+    VectorOfVector *gr = (VectorOfVector *)malloc(sizeof(VectorOfVector));
+    if (!gr) {
         fprintf(stderr, "Memory allocation error in initialize_grammar\n");
         exit(EXIT_FAILURE);
     }
-    initVectorOfVector(grammar);
+    initVectorOfVector(gr);
 
     // Production 1: <program> ===> <otherFunctions> <mainFunction>
     {
@@ -379,7 +383,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 58);  // otherFunctions
         pushBack(&prod, 59);  // mainFunction
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 2: <mainFunction> ===> TK_MAIN <stmts> TK_END
     {
@@ -390,7 +394,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 68);  // stmts
         pushBack(&prod, 2);   // TK_END
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 3: <otherFunctions> ===> <function> <otherFunctions>
     {
@@ -400,7 +404,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 60);  // function
         pushBack(&prod, 58);  // otherFunctions
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 4: <otherFunctions> ===> <eps>
     {
@@ -409,7 +413,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 58);   // otherFunctions
         pushBack(&prod, 110);  // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 5: <function> ===> TK_FUNID <input_par> <output_par> TK_SEM <stmts> TK_END
     {
@@ -423,7 +427,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 68);  // stmts
         pushBack(&prod, 2);   // TK_END
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 6: <input_par> ===> TK_INPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
     {
@@ -437,7 +441,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 63);  // parameter_list
         pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 7: <output_par> ===> TK_OUTPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
     {
@@ -451,7 +455,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 63);  // parameter_list
         pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 8: <output_par> ===> <eps>
     {
@@ -460,7 +464,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 62);  // output_par
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 9: <parameter_list> ===> <dataType> TK_ID <remaining_list>
     {
@@ -471,7 +475,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 56);  // TK_ID
         pushBack(&prod, 67);  // remaining_list
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 10: <dataType> ===> <primitiveDataType>
     {
@@ -480,7 +484,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 64);  // dataType
         pushBack(&prod, 65);  // primitiveDataType
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 11: <dataType> ===> <constructedDataType>
     {
@@ -489,7 +493,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 64);  // dataType
         pushBack(&prod, 66);  // constructedDataType
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 12: <primitiveDataType> ===> TK_INT
     {
@@ -498,7 +502,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 65);  // primitiveDataType
         pushBack(&prod, 11);  // TK_INT
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 13: <primitiveDataType> ===> TK_REAL
     {
@@ -507,7 +511,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 65);  // primitiveDataType
         pushBack(&prod, 12);  // TK_REAL
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 14: <constructedDataType> ===> <A> TK_RUID
     {
@@ -517,7 +521,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 109); // A
         pushBack(&prod, 13);  // TK_RUID
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 15: <constructedDataType> ===> TK_RUID
     {
@@ -526,7 +530,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 66);  // constructedDataType
         pushBack(&prod, 13);  // TK_RUID
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 16: <remaining_list> ===> TK_COMMA <parameter_list>
     {
@@ -536,7 +540,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 14);  // TK_COMMA
         pushBack(&prod, 63);  // parameter_list
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 17: <remaining_list> ===> <eps>
     {
@@ -545,7 +549,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 67);  // remaining_list
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 18: <stmts> ===> <typeDefinitions> <declarations> <otherStmts> <returnStmt>
     {
@@ -557,7 +561,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, 104); // returnStmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 19: <typeDefinitions> ===> <actualOrRedefined> <typeDefinitions>
     {
@@ -567,7 +571,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 70);  // actualOrRedefined
         pushBack(&prod, 69);  // typeDefinitions
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 20: <typeDefinitions> ===> <eps>
     {
@@ -576,7 +580,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 69);  // typeDefinitions
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 21: <actualOrRedefined> ===> <typeDefinition>
     {
@@ -585,7 +589,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 70);  // actualOrRedefined
         pushBack(&prod, 71);  // typeDefinition
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 22: <actualOrRedefined> ===> <definetypestmt>
     {
@@ -594,7 +598,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 70);  // actualOrRedefined
         pushBack(&prod, 108); // definetypestmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 23: <typeDefinition> ===> TK_RECORD TK_RUID <fieldDefinitions> TK_ENDRECORD
     {
@@ -606,7 +610,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 72);  // fieldDefinitions
         pushBack(&prod, 16);  // TK_ENDRECORD
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 24: <typeDefinition> ===> TK_UNION TK_RUID <fieldDefinitions> TK_ENDUNION
     {
@@ -618,7 +622,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 72);  // fieldDefinitions
         pushBack(&prod, 18);  // TK_ENDUNION
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 25: <fieldDefinitions> ===> <fieldDefinition> <fieldDefinition> <moreFields>
     {
@@ -629,7 +633,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 73);  // fieldDefinition
         pushBack(&prod, 75);  // moreFields
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 26: <fieldDefinition> ===> TK_TYPE <fieldType> TK_COLON TK_FIELDID TK_SEM
     {
@@ -642,7 +646,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 21);  // TK_FIELDID
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 27: <fieldType> ===> <primitiveDataType>
     {
@@ -651,7 +655,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 74);  // fieldType
         pushBack(&prod, 65);  // primitiveDataType
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 28: <fieldType> ===> <constructedDataType>
     {
@@ -660,7 +664,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 74);  // fieldType
         pushBack(&prod, 66);  // constructedDataType
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 29: <moreFields> ===> <fieldDefinition> <moreFields>
     {
@@ -670,7 +674,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 73);  // fieldDefinition
         pushBack(&prod, 75);  // moreFields
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 30: <moreFields> ===> <eps>
     {
@@ -679,7 +683,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 75);  // moreFields
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 31: <declarations> ===> <declaration> <declarations>
     {
@@ -689,7 +693,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 77);  // declaration
         pushBack(&prod, 76);  // declarations
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 32: <declarations> ===> <eps>
     {
@@ -698,7 +702,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 76);  // declarations
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 33: <declaration> ===> TK_TYPE <dataType> TK_COLON TK_ID <global_or_not> TK_SEM
     {
@@ -712,7 +716,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 78);  // global_or_not
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 34: <global_or_not> ===> TK_COLON TK_GLOBAL
     {
@@ -722,7 +726,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 20);  // TK_COLON
         pushBack(&prod, 22);  // TK_GLOBAL
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 35: <global_or_not> ===> <eps>
     {
@@ -731,7 +735,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 78);  // global_or_not
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 36: <otherStmts> ===> <stmt> <otherStmts>
     {
@@ -741,7 +745,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 80);  // stmt
         pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 37: <otherStmts> ===> <eps>
     {
@@ -750,7 +754,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 38: <stmt> ===> <assignmentStmt>
     {
@@ -759,7 +763,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 80);  // stmt
         pushBack(&prod, 81);  // assignmentStmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 39: <stmt> ===> <iterativeStmt>
     {
@@ -768,7 +772,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 80);  // stmt
         pushBack(&prod, 89);  // iterativeStmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 40: <stmt> ===> <conditionalStmt>
     {
@@ -777,7 +781,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 80);  // stmt
         pushBack(&prod, 90);  // conditionalStmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 41: <stmt> ===> <ioStmt>
     {
@@ -786,7 +790,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 80);  // stmt
         pushBack(&prod, 92);  // ioStmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 42: <stmt> ===> <funCallStmt>
     {
@@ -795,7 +799,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 80);  // stmt
         pushBack(&prod, 86);  // funCallStmt
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 43: <assignmentStmt> ===> <SingleOrRecId> TK_ASSIGNOP <arithmeticExpression> TK_SEM
     {
@@ -807,7 +811,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 93);  // arithmeticExpression
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 44: <SingleOrRecId> ===> TK_ID <option_single_constructed>
     {
@@ -817,7 +821,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 56);  // TK_ID
         pushBack(&prod, 83);  // option_single_constructed
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 45: <option_single_constructed> ===> <oneExpansion> <moreExpansions>
     {
@@ -827,7 +831,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 84);  // oneExpansion
         pushBack(&prod, 85);  // moreExpansions
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 46: <option_single_constructed> ===> <eps>
     {
@@ -836,7 +840,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 83);  // option_single_constructed
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 47: <moreExpansions> ===> <oneExpansion> <moreExpansions>
     {
@@ -846,7 +850,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 84);  // oneExpansion
         pushBack(&prod, 85);  // moreExpansions
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 48: <moreExpansions> ===> <eps>
     {
@@ -855,7 +859,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 85);  // moreExpansions
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 49: <oneExpansion> ===> TK_DOT TK_FIELDID
     {
@@ -865,7 +869,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 49);  // TK_DOT
         pushBack(&prod, 21);  // TK_FIELDID
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 50: <funCallStmt> ===> <outputParameters> TK_CALL TK_FUNID TK_WITH TK_PARAMETERS <inputParameters> TK_SEM
     {
@@ -880,7 +884,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 88);  // inputParameters
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 51: <outputParameters> ===> TK_SQL <idList> TK_SQR TK_ASSIGNOP
     {
@@ -892,7 +896,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, 23);  // TK_ASSIGNOP
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 52: <outputParameters> ===> <eps>
     {
@@ -901,7 +905,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 87);  // outputParameters
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 53: <inputParameters> ===> TK_SQL <idList> TK_SQR
     {
@@ -912,7 +916,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 106); // idList
         pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 54: <iterativeStmt> ===> TK_WHILE TK_OP <booleanExpression> TK_CL <stmt> <otherStmts> TK_ENDWHILE
     {
@@ -927,7 +931,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, 55);  // TK_ENDWHILE
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 55: <conditionalStmt> ===> TK_IF TK_OP <booleanExpression> TK_CL TK_THEN <stmt> <otherStmts> <elsePart>
     {
@@ -943,7 +947,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, 91);  // elsePart
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 56: <elsePart> ===> TK_ELSE <stmt> <otherStmts> TK_ENDIF
     {
@@ -955,7 +959,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 79);  // otherStmts
         pushBack(&prod, 30);  // TK_ENDIF
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 57: <elsePart> ===> TK_ENDIF
     {
@@ -964,7 +968,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 91);  // elsePart
         pushBack(&prod, 30);  // TK_ENDIF
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 58: <ioStmt> ===> TK_READ TK_OP <var> TK_CL TK_SEM
     {
@@ -977,7 +981,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 59: <ioStmt> ===> TK_WRITE TK_OP <var> TK_CL TK_SEM
     {
@@ -990,7 +994,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 60: <arithmeticExpression> ===> <term> <expPrime>
     {
@@ -1000,7 +1004,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 95);  // term
         pushBack(&prod, 94);  // expPrime
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 61: <expPrime> ===> <lowPrecedenceOp> <term> <expPrime>
     {
@@ -1011,7 +1015,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 95);  // term
         pushBack(&prod, 94);  // expPrime
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 62: <expPrime> ===> <eps>
     {
@@ -1020,7 +1024,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 94);  // expPrime
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 63: <term> ===> <factor> <termPrime>
     {
@@ -1030,7 +1034,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 97);  // factor
         pushBack(&prod, 96);  // termPrime
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 64: <termPrime> ===> <highPrecedenceOp> <factor> <termPrime>
     {
@@ -1041,7 +1045,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 97);  // factor
         pushBack(&prod, 96);  // termPrime
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 65: <termPrime> ===> <eps>
     {
@@ -1050,7 +1054,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 96);  // termPrime
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 66: <factor> ===> TK_OP <arithmeticExpression> TK_CL
     {
@@ -1061,7 +1065,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 93);  // arithmeticExpression
         pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 67: <factor> ===> <var>
     {
@@ -1070,7 +1074,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 97);  // factor
         pushBack(&prod, 101); // var
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 68: <lowPrecedenceOp> ===> TK_PLUS
     {
@@ -1079,7 +1083,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 98);  // lowPrecedenceOp
         pushBack(&prod, 33);  // TK_PLUS
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 69: <lowPrecedenceOp> ===> TK_MINUS
     {
@@ -1088,7 +1092,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 98);  // lowPrecedenceOp
         pushBack(&prod, 34);  // TK_MINUS
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 70: <highPrecedenceOp> ===> TK_MUL
     {
@@ -1097,7 +1101,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 99);  // highPrecedenceOp
         pushBack(&prod, 35);  // TK_MUL
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 71: <highPrecedenceOp> ===> TK_DIV
     {
@@ -1106,7 +1110,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 99);  // highPrecedenceOp
         pushBack(&prod, 36);  // TK_DIV
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 72: <booleanExpression> ===> TK_OP <booleanExpression> TK_CL <logicalOp> TK_OP <booleanExpression> TK_CL
     {
@@ -1121,7 +1125,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 100); // booleanExpression
         pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 73: <booleanExpression> ===> <var> <relationalOp> <var>
     {
@@ -1132,7 +1136,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 101); // var
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 74: <booleanExpression> ===> TK_NOT TK_OP <booleanExpression> TK_CL
     {
@@ -1144,7 +1148,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 100); // booleanExpression
         pushBack(&prod, 26);  // TK_CL
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 75: <var> ===> <SingleOrRecId>
     {
@@ -1153,7 +1157,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 101); // var
         pushBack(&prod, 82);  // SingleOrRecId
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 76: <var> ===> TK_NUM
     {
@@ -1162,7 +1166,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 101); // var
         pushBack(&prod, 53);  // TK_NUM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 77: <var> ===> TK_RNUM
     {
@@ -1171,7 +1175,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 101); // var
         pushBack(&prod, 54);  // TK_RNUM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 78: <logicalOp> ===> TK_AND
     {
@@ -1180,7 +1184,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 102); // logicalOp
         pushBack(&prod, 38);  // TK_AND
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 79: <logicalOp> ===> TK_OR
     {
@@ -1189,7 +1193,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 102); // logicalOp
         pushBack(&prod, 39);  // TK_OR
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 80: <relationalOp> ===> TK_LT
     {
@@ -1198,7 +1202,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 40);  // TK_LT
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 81: <relationalOp> ===> TK_LE
     {
@@ -1207,7 +1211,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 41);  // TK_LE
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 82: <relationalOp> ===> TK_EQ
     {
@@ -1216,7 +1220,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 42);  // TK_EQ
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 83: <relationalOp> ===> TK_GT
     {
@@ -1225,7 +1229,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 43);  // TK_GT
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 84: <relationalOp> ===> TK_GE
     {
@@ -1234,7 +1238,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 44);  // TK_GE
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 85: <relationalOp> ===> TK_NE
     {
@@ -1243,7 +1247,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 103); // relationalOp
         pushBack(&prod, 45);  // TK_NE
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 86: <returnStmt> ===> TK_RETURN <optionalReturn> TK_SEM
     {
@@ -1254,7 +1258,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 105); // optionalReturn
         pushBack(&prod, 4);   // TK_SEM
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 87: <optionalReturn> ===> TK_SQL <idList> TK_SQR
     {
@@ -1265,7 +1269,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 106); // idList
         pushBack(&prod, 9);   // TK_SQR
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 88: <optionalReturn> ===> <eps>
     {
@@ -1274,7 +1278,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 105); // optionalReturn
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 89: <idList> ===> TK_ID <more_ids>
     {
@@ -1284,7 +1288,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 56);  // TK_ID
         pushBack(&prod, 107); // more_ids
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 90: <more_ids> ===> TK_COMMA <idList>
     {
@@ -1294,7 +1298,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 14);  // TK_COMMA
         pushBack(&prod, 106); // idList
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 91: <more_ids> ===> <eps>
     {
@@ -1303,7 +1307,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 107); // more_ids
         pushBack(&prod, 110); // eps
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 92: <definetypestmt> ===> TK_DEFINETYPE <A> TK_RUID TK_AS TK_RUID
     {
@@ -1316,7 +1320,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 48);  // TK_AS
         pushBack(&prod, 13);  // TK_RUID
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 93: <A> ===> TK_RECORD
     {
@@ -1325,7 +1329,7 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 109); // A
         pushBack(&prod, 15);  // TK_RECORD
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
     // Production 94: <A> ===> TK_UNION
     {
@@ -1334,10 +1338,28 @@ First_Follow ComputeFirstAndFollowSets(grammar G)
         pushBack(&prod, 109); // A
         pushBack(&prod, 17);  // TK_UNION
         pushBack(&prod, -1);
-        pushBackVector(grammar, prod);
+        pushBackVector(gr, prod);
     }
 
-    return grammar;
+    grammar G = (grammar *)malloc(sizeof(grammar));
+    G->Grammar = (VectorOfVector *)malloc(sizeof(VectorOfVector));
+    initVectorOfVector(G->Grammar);
+
+    for (int i = 0; i < GRAMMAR_SIZE; i++) {
+        Vector v;
+        initVector(&v);
+    
+    for (int j = 0; j < 10; j++) {
+        pushBack(&v, accessVectorOfVector(gr,i,j));
+        if (accessVectorOfVector(gr,i,j)== -1)
+            break;
+    }
+    
+    pushBackVector(G->Grammar, v);
+}
+
+return G;
+
 }
 
 
