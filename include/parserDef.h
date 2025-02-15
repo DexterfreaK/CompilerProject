@@ -3,10 +3,10 @@
 #define PARSERDEF_H
 
 #include<vectorofvector.h>
-struct FirstAndFollow
+struct First_Follow
 {
-    int **first;
-    int **follow;
+    int **firstset;
+    int **followset;
 };
 
 struct grammar
@@ -15,12 +15,12 @@ struct grammar
 };
 
 typedef struct grammar *grammar;
-typedef struct FirstAndFollow *FirstAndFollow;
+typedef struct First_Follow *First_Follow;
 
 #define NONTERMINALS 53
 #define TERMINALS 57
-#define EPSN 110
-
+#define EPSILON 110
+#define TERMS_SIZE 111
 static char *grammarTerms[111] = {
 "$",                         // 0
 //terminals
