@@ -333,10 +333,11 @@ void FirstSet(int n, grammar gmr, int buffer[150], First_Follow FF)
         check[n] = 0;
         return;
     }
-    if (n == 1)
+    if (n == NONTERMINALS_START) // Assuming first non-terminal is the start symbol
     {
-        buffer[j++] = -1;
+        buffer[j++] = -1; // '$' is represented as 0
     }
+
     for (int i = 0; i < GRAMMAR_SIZE; i++)
     {
         for (int p = 1; p < 12; p++)
@@ -1467,12 +1468,12 @@ int main() {
     
     printf("Initializing grammar...\n");
     grammar G = initialize_grammar();
-    // print_grammar(G);
+    print_grammar(G);
     
     printf("Computing FIRST and FOLLOW sets...\n");
     First_Follow F = ComputeFirstAndFollowSets(G);
-    // printf("hello this is testing of first");
-    // print_first_set(F, G);
+    printf("hello this is testing of first");
+    print_first_set(F, G);
     printf("hello this is testing of follow");
     print_follow_set(F, G);
     
