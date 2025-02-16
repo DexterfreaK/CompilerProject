@@ -33,6 +33,8 @@ int main(int argc, char **argv)
             break;
         case 3:
             parser_main();
+            //uncomment to check stack implementation
+            //stack_main();
             break;
         case 4:
         {
