@@ -1460,47 +1460,75 @@ return G;
 }
 
 
+void parser_main(char *testcaseFile, char *outputFile)
+{
+    // if (parser_initialized == 0)
+    // {
+    //     G = initialize_grammar();
+    //     F = ComputeFirstAndFollowSets(G);
+    //     printf("\nFirst and Follow sets automated \n");
+    //     T = initialize_table(F);
+    //     createParseTable(F, T);
+    //     parser_initialized = 1;
+    // }
+    // char dummy[5] = "----\0";
+    // parseTree root;
+    // root = parseInputSourceCode(testcaseFile, T);
+    // if (syntactically_correct)
+    //     printParseTree(root, outputFile);
+    // else
+    // {
+    //     FILE* fp=fopen(outputFile,"w");
+    //     if(fp==NULL){
+    //         printf("Error opening the file\n");
+    //         exit(1);
+    //     }
+    //     // fprintf(fp," ");
+    //     fclose(fp);
+    //     printf("Code is syntactically incorrect so parse tree could not be constructed\n\n");
+    // }
+}
 // TODO: Remove this main function before submitting the assignment.
 // this main function is just for testing the grammar initialization.
-int main() {
-    // char *testFile = "testcase.txt";
-    // char *outputFile = "output.txt";
+// int main() {
+//     // char *testFile = "testcase.txt";
+//     // char *outputFile = "output.txt";
     
-    printf("Initializing grammar...\n");
-    grammar G = initialize_grammar();
-    print_grammar(G);
+//     printf("Initializing grammar...\n");
+//     grammar G = initialize_grammar();
+//     print_grammar(G);
     
-    printf("Computing FIRST and FOLLOW sets...\n");
-    First_Follow F = ComputeFirstAndFollowSets(G);
-    printf("hello this is testing of first");
-    print_first_set(F, G);
-    printf("hello this is testing of follow");
-    print_follow_set(F, G);
+//     printf("Computing FIRST and FOLLOW sets...\n");
+//     First_Follow F = ComputeFirstAndFollowSets(G);
+//     printf("hello this is testing of first");
+//     print_first_set(F, G);
+//     printf("hello this is testing of follow");
+//     print_follow_set(F, G);
     
-    // printf("Initializing parse table...\n");
-    // table T = initialize_table(F);
-    // createParseTable(F, T);
-    // printTable(T);
+//     // printf("Initializing parse table...\n");
+//     // table T = initialize_table(F);
+//     // createParseTable(F, T);
+//     // printTable(T);
     
-    // printf("Parsing input source code...\n");
-    // parseTree root = parseInputSourceCode(testFile, T);
-    // printParseTree(root, outputFile);
+//     // printf("Parsing input source code...\n");
+//     // parseTree root = parseInputSourceCode(testFile, T);
+//     // printParseTree(root, outputFile);
     
-    // printf("Testing stack operations...\n");
-    // Stack *s = newStack();
-    // parseTree node = createNewNode();
-    // push(s, node);
-    // print_stack(s);
-    // pop(s);
-    // printf("Stack empty: %d\n", isEmpty(s));
+//     // printf("Testing stack operations...\n");
+//     // Stack *s = newStack();
+//     // parseTree node = createNewNode();
+//     // push(s, node);
+//     // print_stack(s);
+//     // pop(s);
+//     // printf("Stack empty: %d\n", isEmpty(s));
     
-    printf("Freeing allocated memory...\n");
-    // freeParseTree(root);
-    freeFirstandFollow(F);
-    // freeTable(T);
-    freeGrammar(G);
-    // freeDataStructures();
+//     printf("Freeing allocated memory...\n");
+//     // freeParseTree(root);
+//     freeFirstandFollow(F);
+//     // freeTable(T);
+//     freeGrammar(G);
+//     // freeDataStructures();
     
-    printf("Testing complete!\n");
-    return 0;
-}
+//     printf("Testing complete!\n");
+//     return 0;
+// }
