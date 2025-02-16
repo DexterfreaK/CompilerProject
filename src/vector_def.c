@@ -163,3 +163,13 @@ void printVectorOfVector(VectorOfVector *vv) {
     }
     printf("]\n");
 }
+Vector *array_to_vector(int *arr, int size)
+{
+    Vector *v = (Vector *)malloc(sizeof(Vector));
+    initVector(v);
+    for (int i = 0; i < size; i++)
+    {
+        pushBack(v, arr[i]);
+    }
+    return v;
+}

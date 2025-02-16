@@ -8,171 +8,6 @@
 
 grammar G;
 First_Follow F;
-
-
-/**
- * @brief Initializes a Vector.
- *
- * @param v Pointer to the Vector to initialize.
- */
-void initVector(Vector *v) {
-    v->capacity = INITIAL_CAPACITY;
-    v->size = 0;
-    v->data = (int *)malloc(v->capacity * sizeof(int));
-    if (!v->data) {
-        fprintf(stderr, "Memory allocation error in initVector\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-/**
- * @brief Adds an element to the end of the Vector.
- *
- * @param v Pointer to the Vector.
- * @param value The integer value to add.
- */
-void pushBack(Vector *v, int value) {
-    if (v->size == v->capacity) {
-        v->capacity *= 2;
-        int *temp = realloc(v->data, v->capacity * sizeof(int));
-        if (!temp) {
-            fprintf(stderr, "Memory allocation error in pushBack\n");
-            exit(EXIT_FAILURE);
-        }
-        v->data = temp;
-    }
-    v->data[v->size++] = value;
-}
-
-/**
- * @brief Frees the memory allocated for the Vector.
- *
- * @param v Pointer to the Vector to free.
- */
-void freeVector(Vector *v) {
-    if (v->data) {
-        free(v->data);
-    }
-    v->data = NULL;
-    v->size = 0;
-    v->capacity = 0;
-}
-
-/**
- * @brief Accesses an element in the Vector with bounds checking.
- *
- * @param v Pointer to the Vector.
- * @param index The index of the element to access.
- * @return The integer value at the specified index.
- */
-int accessVector(Vector *v, int index) {
-    if (index < 0 || index >= v->size) {
-        fprintf(stderr, "Index %d out of bounds for vector of size %d\n", index, v->size);
-        exit(EXIT_FAILURE);
-    }
-    return v->data[index];
-}
-
-/**
- * @brief Prints the elements of the Vector.
- *
- * @param v Pointer to the Vector to print.
- */
-void printVector(Vector *v) {
-    printf("[");
-    for (int i = 0; i < v->size; i++) {
-        printf("%d", v->data[i]);
-        if (i < v->size - 1)
-            printf(", ");
-    }
-    printf("]");
-}
-
-/**
- * @brief Initializes a VectorOfVector.
- *
- * @param vv Pointer to the VectorOfVector to initialize.
- */
-void initVectorOfVector(VectorOfVector *vv) {
-    vv->capacity = INITIAL_CAPACITY;
-    vv->size = 0;
-    vv->data = (Vector *)malloc(vv->capacity * sizeof(Vector));
-    if (!vv->data) {
-        fprintf(stderr, "Memory allocation error in initVectorOfVector\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-/**
- * @brief Adds a Vector to the end of the VectorOfVector.
- *
- * @param vv Pointer to the VectorOfVector.
- * @param v The Vector to add.
- */
-void pushBackVector(VectorOfVector *vv, Vector v) {
-    if (vv->size == vv->capacity) {
-        vv->capacity *= 2;
-        Vector *temp = realloc(vv->data, vv->capacity * sizeof(Vector));
-        if (!temp) {
-            fprintf(stderr, "Memory allocation error in pushBackVector\n");
-            exit(EXIT_FAILURE);
-        }
-        vv->data = temp;
-    }
-    vv->data[vv->size++] = v;
-}
-
-/**
- * @brief Frees the memory allocated for the VectorOfVector.
- *
- * @param vv Pointer to the VectorOfVector to free.
- */
-void freeVectorOfVector(VectorOfVector *vv) {
-    if (vv->data) {
-        for (int i = 0; i < vv->size; i++) {
-            freeVector(&vv->data[i]);
-        }
-        free(vv->data);
-    }
-    vv->data = NULL;
-    vv->size = 0;
-    vv->capacity = 0;
-}
-
-/**
- * @brief Accesses an element in the VectorOfVector.
- *
- * @param vv Pointer to the VectorOfVector.
- * @param i The index of the Vector to access.
- * @param j The index of the element within the Vector to access.
- * @return The integer value at the specified indices.
- */
-int accessVectorOfVector(VectorOfVector *vv, int i, int j) {
-    if (i < 0 || i >= vv->size) {
-        fprintf(stderr, "Vector index %d out of bounds for vector-of-vector of size %d\n", i, vv->size);
-        exit(EXIT_FAILURE);
-    }
-    return accessVector(&(vv->data[i]), j);
-}
-
-/**
- * @brief Prints the elements of the VectorOfVector.
- *
- * @param vv Pointer to the VectorOfVector to print.
- */
-void printVectorOfVector(VectorOfVector *vv) {
-    printf("[\n");
-    for (int i = 0; i < vv->size; i++) {
-        printf("  ");
-        printVector(&(vv->data[i]));
-        if (i < vv->size - 1)
-            printf(",");
-        printf("\n");
-    }
-    printf("]\n");
-}
-
-
 // Function to print Grammar
 void print_grammar(grammar G)
 {
@@ -464,7 +299,7 @@ void freeGrammar(grammar G)
  *
  * @return Pointer to the initialized VectorOfVector representing the grammar.
  */
-grammar initialize_grammar() {
+ grammar initialize_grammar() {
     VectorOfVector *gr = (VectorOfVector *)malloc(sizeof(VectorOfVector));
     if (!gr) {
         fprintf(stderr, "Memory allocation error in initialize_grammar\n");
@@ -474,988 +309,589 @@ grammar initialize_grammar() {
 
     // Production 1: <program> ===> <otherFunctions> <mainFunction>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 57);  // program
-        pushBack(&prod, 58);  // otherFunctions
-        pushBack(&prod, 59);  // mainFunction
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr1[]={57,58,59,-1};
+        Vector *v1 = array_to_vector(arr1, 4);
+        pushBackVector(gr, *v1);
     }
     // Production 2: <mainFunction> ===> TK_MAIN <stmts> TK_END
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 59);  // mainFunction
-        pushBack(&prod, 1);   // TK_MAIN
-        pushBack(&prod, 68);  // stmts
-        pushBack(&prod, 2);   // TK_END
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr2[]={59,1,68,2,-1};
+        Vector *v2 = array_to_vector(arr2, 5);
+        pushBackVector(gr, *v2);
     }
     // Production 3: <otherFunctions> ===> <function> <otherFunctions>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 58);  // otherFunctions
-        pushBack(&prod, 60);  // function
-        pushBack(&prod, 58);  // otherFunctions
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr3[]={58,60,58,-1};
+        Vector *v3 = array_to_vector(arr3, 4);
+        pushBackVector(gr, *v3);
     }
     // Production 4: <otherFunctions> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 58);   // otherFunctions
-        pushBack(&prod, 110);  // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr4[]={58,110,-1};
+        Vector *v4 = array_to_vector(arr4, 3);
+        pushBackVector(gr, *v4);
     }
     // Production 5: <function> ===> TK_FUNID <input_par> <output_par> TK_SEM <stmts> TK_END
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 60);  // function
-        pushBack(&prod, 3);   // TK_FUNID
-        pushBack(&prod, 61);  // input_par
-        pushBack(&prod, 62);  // output_par
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, 68);  // stmts
-        pushBack(&prod, 2);   // TK_END
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr5[]={60,3,61,62,4,68,2,-1};
+        Vector *v5 = array_to_vector(arr5, 8);
+        pushBackVector(gr, *v5);
     }
     // Production 6: <input_par> ===> TK_INPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 61);  // input_par
-        pushBack(&prod, 5);   // TK_INPUT
-        pushBack(&prod, 6);   // TK_PARAMETER
-        pushBack(&prod, 7);   // TK_LIST
-        pushBack(&prod, 8);   // TK_SQL
-        pushBack(&prod, 63);  // parameter_list
-        pushBack(&prod, 9);   // TK_SQR
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr6[]={61,5,6,7,8,63,9,-1};
+        Vector *v6 = array_to_vector(arr6, 8);
+        pushBackVector(gr, *v6);
     }
     // Production 7: <output_par> ===> TK_OUTPUT TK_PARAMETER TK_LIST TK_SQL <parameter_list> TK_SQR
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 62);  // output_par
-        pushBack(&prod, 10);  // TK_OUTPUT
-        pushBack(&prod, 6);   // TK_PARAMETER
-        pushBack(&prod, 7);   // TK_LIST
-        pushBack(&prod, 8);   // TK_SQL
-        pushBack(&prod, 63);  // parameter_list
-        pushBack(&prod, 9);   // TK_SQR
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr7[]={62,10,6,7,8,63,9,-1};
+        Vector *v7 = array_to_vector(arr7, 8);
+        pushBackVector(gr, *v7);
     }
     // Production 8: <output_par> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 62);  // output_par
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr8[]={62,110,-1};
+        Vector *v8 = array_to_vector(arr8, 3);
+        pushBackVector(gr, *v8);
     }
     // Production 9: <parameter_list> ===> <dataType> TK_ID <remaining_list>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 63);  // parameter_list
-        pushBack(&prod, 64);  // dataType
-        pushBack(&prod, 56);  // TK_ID
-        pushBack(&prod, 67);  // remaining_list
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr9[]={63,64,56,67,-1};
+        Vector *v9 = array_to_vector(arr9, 5);
+        pushBackVector(gr, *v9);
     }
     // Production 10: <dataType> ===> <primitiveDataType>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 64);  // dataType
-        pushBack(&prod, 65);  // primitiveDataType
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr10[] = {64, 65, -1};
+        Vector *v10 = array_to_vector(arr10, 3);
+        pushBackVector(gr, *v10);
     }
     // Production 11: <dataType> ===> <constructedDataType>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 64);  // dataType
-        pushBack(&prod, 66);  // constructedDataType
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr11[] = {64, 66, -1};
+        Vector *v11 = array_to_vector(arr11, 3);
+        pushBackVector(gr, *v11);
     }
     // Production 12: <primitiveDataType> ===> TK_INT
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 65);  // primitiveDataType
-        pushBack(&prod, 11);  // TK_INT
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr12[] = {65, 11, -1};
+        Vector *v12 = array_to_vector(arr12, 3);
+        pushBackVector(gr, *v12);
     }
     // Production 13: <primitiveDataType> ===> TK_REAL
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 65);  // primitiveDataType
-        pushBack(&prod, 12);  // TK_REAL
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr13[] = {65, 12, -1};
+        Vector *v13 = array_to_vector(arr13, 3);
+        pushBackVector(gr, *v13);
     }
     // Production 14: <constructedDataType> ===> <A> TK_RUID
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 66);  // constructedDataType
-        pushBack(&prod, 109); // A
-        pushBack(&prod, 13);  // TK_RUID
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr14[] = {66, 109, 13, -1};
+        Vector *v14 = array_to_vector(arr14, 4);
+        pushBackVector(gr, *v14);
     }
     // Production 15: <constructedDataType> ===> TK_RUID
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 66);  // constructedDataType
-        pushBack(&prod, 13);  // TK_RUID
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr15[] = {66, 13, -1};
+        Vector *v15 = array_to_vector(arr15, 3);
+        pushBackVector(gr, *v15);
     }
     // Production 16: <remaining_list> ===> TK_COMMA <parameter_list>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 67);  // remaining_list
-        pushBack(&prod, 14);  // TK_COMMA
-        pushBack(&prod, 63);  // parameter_list
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr16[] = {67, 14, 63, -1};
+        Vector *v16 = array_to_vector(arr16, 4);
+        pushBackVector(gr, *v16);
     }
     // Production 17: <remaining_list> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 67);  // remaining_list
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr17[] = {67, 110, -1};
+        Vector *v17 = array_to_vector(arr17, 3);
+        pushBackVector(gr, *v17);
     }
     // Production 18: <stmts> ===> <typeDefinitions> <declarations> <otherStmts> <returnStmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 68);  // stmts
-        pushBack(&prod, 69);  // typeDefinitions
-        pushBack(&prod, 76);  // declarations
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, 104); // returnStmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr18[] = {68, 69, 76, 79, 104, -1};
+        Vector *v18 = array_to_vector(arr18, 6);
+        pushBackVector(gr, *v18);
     }
     // Production 19: <typeDefinitions> ===> <actualOrRedefined> <typeDefinitions>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 69);  // typeDefinitions
-        pushBack(&prod, 70);  // actualOrRedefined
-        pushBack(&prod, 69);  // typeDefinitions
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr19[] = {69, 70, 69, -1};
+        Vector *v19 = array_to_vector(arr19, 4);
+        pushBackVector(gr, *v19);
     }
     // Production 20: <typeDefinitions> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 69);  // typeDefinitions
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr20[] = {69, 110, -1};
+        Vector *v20 = array_to_vector(arr20, 3);
+        pushBackVector(gr, *v20);
     }
     // Production 21: <actualOrRedefined> ===> <typeDefinition>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 70);  // actualOrRedefined
-        pushBack(&prod, 71);  // typeDefinition
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr21[] = {70, 71, -1};
+        Vector *v21 = array_to_vector(arr21, 3);
+        pushBackVector(gr, *v21);
     }
     // Production 22: <actualOrRedefined> ===> <definetypestmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 70);  // actualOrRedefined
-        pushBack(&prod, 108); // definetypestmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr22[] = {70, 108, -1};
+        Vector *v22 = array_to_vector(arr22, 3);
+        pushBackVector(gr, *v22);
     }
     // Production 23: <typeDefinition> ===> TK_RECORD TK_RUID <fieldDefinitions> TK_ENDRECORD
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 71);  // typeDefinition
-        pushBack(&prod, 15);  // TK_RECORD
-        pushBack(&prod, 13);  // TK_RUID
-        pushBack(&prod, 72);  // fieldDefinitions
-        pushBack(&prod, 16);  // TK_ENDRECORD
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr23[] = {71, 15, 13, 72, 16, -1};
+        Vector *v23 = array_to_vector(arr23, 6);
+        pushBackVector(gr, *v23);
     }
     // Production 24: <typeDefinition> ===> TK_UNION TK_RUID <fieldDefinitions> TK_ENDUNION
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 71);  // typeDefinition
-        pushBack(&prod, 17);  // TK_UNION
-        pushBack(&prod, 13);  // TK_RUID
-        pushBack(&prod, 72);  // fieldDefinitions
-        pushBack(&prod, 18);  // TK_ENDUNION
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr24[] = {71, 17, 13, 72, 18, -1};
+        Vector *v24 = array_to_vector(arr24, 6);
+        pushBackVector(gr, *v24);
     }
     // Production 25: <fieldDefinitions> ===> <fieldDefinition> <fieldDefinition> <moreFields>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 72);  // fieldDefinitions
-        pushBack(&prod, 73);  // fieldDefinition
-        pushBack(&prod, 73);  // fieldDefinition
-        pushBack(&prod, 75);  // moreFields
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr25[] = {72, 73, 73, 75, -1};
+        Vector *v25 = array_to_vector(arr25, 5);
+        pushBackVector(gr, *v25);
     }
     // Production 26: <fieldDefinition> ===> TK_TYPE <fieldType> TK_COLON TK_FIELDID TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 73);  // fieldDefinition
-        pushBack(&prod, 19);  // TK_TYPE
-        pushBack(&prod, 74);  // fieldType
-        pushBack(&prod, 20);  // TK_COLON
-        pushBack(&prod, 21);  // TK_FIELDID
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr26[] = {73, 19, 74, 20, 21, 4, -1};
+        Vector *v26 = array_to_vector(arr26, 7);
+        pushBackVector(gr, *v26);
     }
     // Production 27: <fieldType> ===> <primitiveDataType>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 74);  // fieldType
-        pushBack(&prod, 65);  // primitiveDataType
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr27[] = {74, 65, -1};
+        Vector *v27 = array_to_vector(arr27, 3);
+        pushBackVector(gr, *v27);
     }
     // Production 28: <fieldType> ===> <constructedDataType>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 74);  // fieldType
-        pushBack(&prod, 66);  // constructedDataType
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr28[] = {74, 66, -1};
+        Vector *v28 = array_to_vector(arr28, 3);
+        pushBackVector(gr, *v28);
     }
     // Production 29: <moreFields> ===> <fieldDefinition> <moreFields>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 75);  // moreFields
-        pushBack(&prod, 73);  // fieldDefinition
-        pushBack(&prod, 75);  // moreFields
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr29[] = {75, 73, 75, -1};
+        Vector *v29 = array_to_vector(arr29, 4);
+        pushBackVector(gr, *v29);
     }
     // Production 30: <moreFields> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 75);  // moreFields
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr30[] = {75, 110, -1};
+        Vector *v30 = array_to_vector(arr30, 3);
+        pushBackVector(gr, *v30);
     }
     // Production 31: <declarations> ===> <declaration> <declarations>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 76);  // declarations
-        pushBack(&prod, 77);  // declaration
-        pushBack(&prod, 76);  // declarations
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr31[] = {76, 77, 76, -1};
+        Vector *v31 = array_to_vector(arr31, 4);
+        pushBackVector(gr, *v31);
     }
     // Production 32: <declarations> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 76);  // declarations
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr32[] = {76, 110, -1};
+        Vector *v32 = array_to_vector(arr32, 3);
+        pushBackVector(gr, *v32);
     }
     // Production 33: <declaration> ===> TK_TYPE <dataType> TK_COLON TK_ID <global_or_not> TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 77);  // declaration
-        pushBack(&prod, 19);  // TK_TYPE
-        pushBack(&prod, 64);  // dataType
-        pushBack(&prod, 20);  // TK_COLON
-        pushBack(&prod, 56);  // TK_ID
-        pushBack(&prod, 78);  // global_or_not
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr33[] = {77, 19, 64, 20, 56, 78, 4, -1};
+        Vector *v33 = array_to_vector(arr33, 8);
+        pushBackVector(gr, *v33);
     }
     // Production 34: <global_or_not> ===> TK_COLON TK_GLOBAL
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 78);  // global_or_not
-        pushBack(&prod, 20);  // TK_COLON
-        pushBack(&prod, 22);  // TK_GLOBAL
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr34[] = {78, 20, 22, -1};
+        Vector *v34 = array_to_vector(arr34, 4);
+        pushBackVector(gr, *v34);
     }
     // Production 35: <global_or_not> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 78);  // global_or_not
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr35[] = {78, 110, -1};
+        Vector *v35 = array_to_vector(arr35, 3);
+        pushBackVector(gr, *v35);
     }
     // Production 36: <otherStmts> ===> <stmt> <otherStmts>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr36[] = {79, 80, 79, -1};
+        Vector *v36 = array_to_vector(arr36, 4);
+        pushBackVector(gr, *v36);
     }
     // Production 37: <otherStmts> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr37[] = {79, 110, -1};
+        Vector *v37 = array_to_vector(arr37, 3);
+        pushBackVector(gr, *v37);
     }
     // Production 38: <stmt> ===> <assignmentStmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 81);  // assignmentStmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr38[] = {80, 81, -1};
+        Vector *v38 = array_to_vector(arr38, 3);
+        pushBackVector(gr, *v38);
     }
     // Production 39: <stmt> ===> <iterativeStmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 89);  // iterativeStmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr39[] = {80, 89, -1};
+        Vector *v39 = array_to_vector(arr39, 3);
+        pushBackVector(gr, *v39);
     }
     // Production 40: <stmt> ===> <conditionalStmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 90);  // conditionalStmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr40[] = {80, 90, -1};
+        Vector *v40 = array_to_vector(arr40, 3);
+        pushBackVector(gr, *v40);
     }
     // Production 41: <stmt> ===> <ioStmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 92);  // ioStmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr41[] = {80, 92, -1};
+        Vector *v41 = array_to_vector(arr41, 3);
+        pushBackVector(gr, *v41);
     }
     // Production 42: <stmt> ===> <funCallStmt>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 86);  // funCallStmt
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr42[] = {80, 86, -1};
+        Vector *v42 = array_to_vector(arr42, 3);
+        pushBackVector(gr, *v42);
     }
     // Production 43: <assignmentStmt> ===> <SingleOrRecId> TK_ASSIGNOP <arithmeticExpression> TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 81);  // assignmentStmt
-        pushBack(&prod, 82);  // SingleOrRecId
-        pushBack(&prod, 23);  // TK_ASSIGNOP
-        pushBack(&prod, 93);  // arithmeticExpression
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr43[] = {81, 82, 23, 93, 4, -1};
+        Vector *v43 = array_to_vector(arr43, 6);
+        pushBackVector(gr, *v43);
     }
     // Production 44: <SingleOrRecId> ===> TK_ID <option_single_constructed>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 82);  // SingleOrRecId
-        pushBack(&prod, 56);  // TK_ID
-        pushBack(&prod, 83);  // option_single_constructed
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr44[] = {82, 56, 83, -1};
+        Vector *v44 = array_to_vector(arr44, 4);
+        pushBackVector(gr, *v44);
     }
     // Production 45: <option_single_constructed> ===> <oneExpansion> <moreExpansions>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 83);  // option_single_constructed
-        pushBack(&prod, 84);  // oneExpansion
-        pushBack(&prod, 85);  // moreExpansions
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr45[] = {83, 84, 85, -1};
+        Vector *v45 = array_to_vector(arr45, 4);
+        pushBackVector(gr, *v45);
     }
     // Production 46: <option_single_constructed> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 83);  // option_single_constructed
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr46[] = {83, 110, -1};
+        Vector *v46 = array_to_vector(arr46, 3);
+        pushBackVector(gr, *v46);
     }
     // Production 47: <moreExpansions> ===> <oneExpansion> <moreExpansions>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 85);  // moreExpansions
-        pushBack(&prod, 84);  // oneExpansion
-        pushBack(&prod, 85);  // moreExpansions
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr47[] = {85, 84, 85, -1};
+        Vector *v47 = array_to_vector(arr47, 4);
+        pushBackVector(gr, *v47);
     }
     // Production 48: <moreExpansions> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 85);  // moreExpansions
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr48[] = {85, 110, -1};
+        Vector *v48 = array_to_vector(arr48, 3);
+        pushBackVector(gr, *v48);
     }
     // Production 49: <oneExpansion> ===> TK_DOT TK_FIELDID
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 84);  // oneExpansion
-        pushBack(&prod, 49);  // TK_DOT
-        pushBack(&prod, 21);  // TK_FIELDID
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr49[] = {84, 49, 21, -1};
+        Vector *v49 = array_to_vector(arr49, 4);
+        pushBackVector(gr, *v49);
     }
     // Production 50: <funCallStmt> ===> <outputParameters> TK_CALL TK_FUNID TK_WITH TK_PARAMETERS <inputParameters> TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 86);  // funCallStmt
-        pushBack(&prod, 87);  // outputParameters
-        pushBack(&prod, 50);  // TK_CALL
-        pushBack(&prod, 3);   // TK_FUNID
-        pushBack(&prod, 51);  // TK_WITH
-        pushBack(&prod, 52);  // TK_PARAMETERS
-        pushBack(&prod, 88);  // inputParameters
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr50[] = {86, 87, 50, 3, 51, 52, 88, 4, -1};
+        Vector *v50 = array_to_vector(arr50, 9);
+        pushBackVector(gr, *v50);
     }
     // Production 51: <outputParameters> ===> TK_SQL <idList> TK_SQR TK_ASSIGNOP
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 87);  // outputParameters
-        pushBack(&prod, 8);   // TK_SQL
-        pushBack(&prod, 106); // idList
-        pushBack(&prod, 9);   // TK_SQR
-        pushBack(&prod, 23);  // TK_ASSIGNOP
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr51[] = {87, 8, 106, 9, 23, -1};
+        Vector *v51 = array_to_vector(arr51, 6);
+        pushBackVector(gr, *v51);
     }
     // Production 52: <outputParameters> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 87);  // outputParameters
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr52[] = {87, 110, -1};
+        Vector *v52 = array_to_vector(arr52, 3);
+        pushBackVector(gr, *v52);
     }
     // Production 53: <inputParameters> ===> TK_SQL <idList> TK_SQR
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 88);  // inputParameters
-        pushBack(&prod, 8);   // TK_SQL
-        pushBack(&prod, 106); // idList
-        pushBack(&prod, 9);   // TK_SQR
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr53[] = {88, 8, 106, 9, -1};
+        Vector *v53 = array_to_vector(arr53, 5);
+        pushBackVector(gr, *v53);
     }
     // Production 54: <iterativeStmt> ===> TK_WHILE TK_OP <booleanExpression> TK_CL <stmt> <otherStmts> TK_ENDWHILE
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 89);  // iterativeStmt
-        pushBack(&prod, 24);  // TK_WHILE
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, 55);  // TK_ENDWHILE
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr54[] = {89, 24, 25, 100, 26, 80, 79, 55, -1};
+        Vector *v54 = array_to_vector(arr54, 9);
+        pushBackVector(gr, *v54);
     }
     // Production 55: <conditionalStmt> ===> TK_IF TK_OP <booleanExpression> TK_CL TK_THEN <stmt> <otherStmts> <elsePart>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 90);  // conditionalStmt
-        pushBack(&prod, 27);  // TK_IF
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, 28);  // TK_THEN
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, 91);  // elsePart
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr55[] = {90, 27, 25, 100, 26, 28, 80, 79, 91, -1};
+        Vector *v55 = array_to_vector(arr55, 10);
+        pushBackVector(gr, *v55);
     }
     // Production 56: <elsePart> ===> TK_ELSE <stmt> <otherStmts> TK_ENDIF
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 91);  // elsePart
-        pushBack(&prod, 29);  // TK_ELSE
-        pushBack(&prod, 80);  // stmt
-        pushBack(&prod, 79);  // otherStmts
-        pushBack(&prod, 30);  // TK_ENDIF
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr56[] = {91, 29, 80, 79, 30, -1};
+        Vector *v56 = array_to_vector(arr56, 6);
+        pushBackVector(gr, *v56);
     }
     // Production 57: <elsePart> ===> TK_ENDIF
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 91);  // elsePart
-        pushBack(&prod, 30);  // TK_ENDIF
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr57[] = {91, 30, -1};
+        Vector *v57 = array_to_vector(arr57, 3);
+        pushBackVector(gr, *v57);
     }
     // Production 58: <ioStmt> ===> TK_READ TK_OP <var> TK_CL TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 92);  // ioStmt
-        pushBack(&prod, 31);  // TK_READ
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 101); // var
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr58[] = {92, 31, 25, 101, 26, 4, -1};
+        Vector *v58 = array_to_vector(arr58, 7);
+        pushBackVector(gr, *v58);
     }
     // Production 59: <ioStmt> ===> TK_WRITE TK_OP <var> TK_CL TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 92);  // ioStmt
-        pushBack(&prod, 32);  // TK_WRITE
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 101); // var
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr59[] = {92, 32, 25, 101, 26, 4, -1};
+        Vector *v59 = array_to_vector(arr59, 7);
+        pushBackVector(gr, *v59);
     }
     // Production 60: <arithmeticExpression> ===> <term> <expPrime>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 93);  // arithmeticExpression
-        pushBack(&prod, 95);  // term
-        pushBack(&prod, 94);  // expPrime
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr60[] = {93, 95, 94, -1};
+        Vector *v60 = array_to_vector(arr60, 4);
+        pushBackVector(gr, *v60);
     }
     // Production 61: <expPrime> ===> <lowPrecedenceOp> <term> <expPrime>
+    // Production 61: <expPrime> ===> <lowPrecedenceOp> <term> <expPrime>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 94);  // expPrime
-        pushBack(&prod, 98);  // lowPrecedenceOp
-        pushBack(&prod, 95);  // term
-        pushBack(&prod, 94);  // expPrime
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr61[] = {94, 98, 95, 94, -1};
+        Vector *v61 = array_to_vector(arr61, 5);
+        pushBackVector(gr, *v61);
     }
     // Production 62: <expPrime> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 94);  // expPrime
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr62[] = {94, 110, -1};
+        Vector *v62 = array_to_vector(arr62, 3);
+        pushBackVector(gr, *v62);
     }
     // Production 63: <term> ===> <factor> <termPrime>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 95);  // term
-        pushBack(&prod, 97);  // factor
-        pushBack(&prod, 96);  // termPrime
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr63[] = {95, 97, 96, -1};
+        Vector *v63 = array_to_vector(arr63, 4);
+        pushBackVector(gr, *v63);
     }
     // Production 64: <termPrime> ===> <highPrecedenceOp> <factor> <termPrime>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 96);  // termPrime
-        pushBack(&prod, 99);  // highPrecedenceOp
-        pushBack(&prod, 97);  // factor
-        pushBack(&prod, 96);  // termPrime
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr64[] = {96, 99, 97, 96, -1};
+        Vector *v64 = array_to_vector(arr64, 5);
+        pushBackVector(gr, *v64);
     }
     // Production 65: <termPrime> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 96);  // termPrime
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr65[] = {96, 110, -1};
+        Vector *v65 = array_to_vector(arr65, 3);
+        pushBackVector(gr, *v65);
     }
     // Production 66: <factor> ===> TK_OP <arithmeticExpression> TK_CL
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 97);  // factor
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 93);  // arithmeticExpression
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr66[] = {97, 25, 93, 26, -1};
+        Vector *v66 = array_to_vector(arr66, 5);
+        pushBackVector(gr, *v66);
     }
     // Production 67: <factor> ===> <var>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 97);  // factor
-        pushBack(&prod, 101); // var
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr67[] = {97, 101, -1};
+        Vector *v67 = array_to_vector(arr67, 3);
+        pushBackVector(gr, *v67);
     }
     // Production 68: <lowPrecedenceOp> ===> TK_PLUS
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 98);  // lowPrecedenceOp
-        pushBack(&prod, 33);  // TK_PLUS
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr68[] = {98, 33, -1};
+        Vector *v68 = array_to_vector(arr68, 3);
+        pushBackVector(gr, *v68);
     }
     // Production 69: <lowPrecedenceOp> ===> TK_MINUS
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 98);  // lowPrecedenceOp
-        pushBack(&prod, 34);  // TK_MINUS
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr69[] = {98, 34, -1};
+        Vector *v69 = array_to_vector(arr69, 3);
+        pushBackVector(gr, *v69);
     }
     // Production 70: <highPrecedenceOp> ===> TK_MUL
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 99);  // highPrecedenceOp
-        pushBack(&prod, 35);  // TK_MUL
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr70[] = {99, 35, -1};
+        Vector *v70 = array_to_vector(arr70, 3);
+        pushBackVector(gr, *v70);
     }
     // Production 71: <highPrecedenceOp> ===> TK_DIV
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 99);  // highPrecedenceOp
-        pushBack(&prod, 36);  // TK_DIV
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr71[] = {99, 36, -1};
+        Vector *v71 = array_to_vector(arr71, 3);
+        pushBackVector(gr, *v71);
     }
     // Production 72: <booleanExpression> ===> TK_OP <booleanExpression> TK_CL <logicalOp> TK_OP <booleanExpression> TK_CL
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, 102); // logicalOp
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr72[] = {100, 25, 100, 26, 102, 25, 100, 26, -1};
+        Vector *v72 = array_to_vector(arr72, 9);
+        pushBackVector(gr, *v72);
     }
     // Production 73: <booleanExpression> ===> <var> <relationalOp> <var>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 101); // var
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 101); // var
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr73[] = {100, 101, 103, 101, -1};
+        Vector *v73 = array_to_vector(arr73, 5);
+        pushBackVector(gr, *v73);
     }
     // Production 74: <booleanExpression> ===> TK_NOT TK_OP <booleanExpression> TK_CL
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 37);  // TK_NOT
-        pushBack(&prod, 25);  // TK_OP
-        pushBack(&prod, 100); // booleanExpression
-        pushBack(&prod, 26);  // TK_CL
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr74[] = {100, 37, 25, 100, 26, -1};
+        Vector *v74 = array_to_vector(arr74, 6);
+        pushBackVector(gr, *v74);
     }
     // Production 75: <var> ===> <SingleOrRecId>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 101); // var
-        pushBack(&prod, 82);  // SingleOrRecId
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr75[] = {101, 82, -1};
+        Vector *v75 = array_to_vector(arr75, 3);
+        pushBackVector(gr, *v75);
     }
     // Production 76: <var> ===> TK_NUM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 101); // var
-        pushBack(&prod, 53);  // TK_NUM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr76[] = {101, 53, -1};
+        Vector *v76 = array_to_vector(arr76, 3);
+        pushBackVector(gr, *v76);
     }
     // Production 77: <var> ===> TK_RNUM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 101); // var
-        pushBack(&prod, 54);  // TK_RNUM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr77[] = {101, 54, -1};
+        Vector *v77 = array_to_vector(arr77, 3);
+        pushBackVector(gr, *v77);
     }
     // Production 78: <logicalOp> ===> TK_AND
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 102); // logicalOp
-        pushBack(&prod, 38);  // TK_AND
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr78[] = {102, 38, -1};
+        Vector *v78 = array_to_vector(arr78, 3);
+        pushBackVector(gr, *v78);
     }
     // Production 79: <logicalOp> ===> TK_OR
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 102); // logicalOp
-        pushBack(&prod, 39);  // TK_OR
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr79[] = {102, 39, -1};
+        Vector *v79 = array_to_vector(arr79, 3);
+        pushBackVector(gr, *v79);
     }
     // Production 80: <relationalOp> ===> TK_LT
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 40);  // TK_LT
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr80[] = {103, 40, -1};
+        Vector *v80 = array_to_vector(arr80, 3);
+        pushBackVector(gr, *v80);
     }
     // Production 81: <relationalOp> ===> TK_LE
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 41);  // TK_LE
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr81[] = {103, 41, -1};
+        Vector *v81 = array_to_vector(arr81, 3);
+        pushBackVector(gr, *v81);
     }
     // Production 82: <relationalOp> ===> TK_EQ
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 42);  // TK_EQ
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr82[] = {103, 42, -1};
+        Vector *v82 = array_to_vector(arr82, 3);
+        pushBackVector(gr, *v82);
     }
     // Production 83: <relationalOp> ===> TK_GT
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 43);  // TK_GT
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr83[] = {103, 43, -1};
+        Vector *v83 = array_to_vector(arr83, 3);
+        pushBackVector(gr, *v83);
     }
     // Production 84: <relationalOp> ===> TK_GE
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 44);  // TK_GE
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr84[] = {103, 44, -1};
+        Vector *v84 = array_to_vector(arr84, 3);
+        pushBackVector(gr, *v84);
     }
     // Production 85: <relationalOp> ===> TK_NE
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 103); // relationalOp
-        pushBack(&prod, 45);  // TK_NE
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr85[] = {103, 45, -1};
+        Vector *v85 = array_to_vector(arr85, 3);
+        pushBackVector(gr, *v85);
     }
     // Production 86: <returnStmt> ===> TK_RETURN <optionalReturn> TK_SEM
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 104); // returnStmt
-        pushBack(&prod, 46);  // TK_RETURN
-        pushBack(&prod, 105); // optionalReturn
-        pushBack(&prod, 4);   // TK_SEM
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr86[] = {104, 46, 105, 4, -1};
+        Vector *v86 = array_to_vector(arr86, 5);
+        pushBackVector(gr, *v86);
     }
     // Production 87: <optionalReturn> ===> TK_SQL <idList> TK_SQR
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 105); // optionalReturn
-        pushBack(&prod, 8);   // TK_SQL
-        pushBack(&prod, 106); // idList
-        pushBack(&prod, 9);   // TK_SQR
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr87[] = {105, 8, 106, 9, -1};
+        Vector *v87 = array_to_vector(arr87, 5);
+        pushBackVector(gr, *v87);
     }
     // Production 88: <optionalReturn> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 105); // optionalReturn
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr88[] = {105, 110, -1};
+        Vector *v88 = array_to_vector(arr88, 3);
+        pushBackVector(gr, *v88);
     }
     // Production 89: <idList> ===> TK_ID <more_ids>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 106); // idList
-        pushBack(&prod, 56);  // TK_ID
-        pushBack(&prod, 107); // more_ids
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr89[] = {106, 56, 107, -1};
+        Vector *v89 = array_to_vector(arr89, 4);
+        pushBackVector(gr, *v89);
     }
     // Production 90: <more_ids> ===> TK_COMMA <idList>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 107); // more_ids
-        pushBack(&prod, 14);  // TK_COMMA
-        pushBack(&prod, 106); // idList
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr90[] = {107, 14, 106, -1};
+        Vector *v90 = array_to_vector(arr90, 4);
+        pushBackVector(gr, *v90);
     }
     // Production 91: <more_ids> ===> <eps>
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 107); // more_ids
-        pushBack(&prod, 110); // eps
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr91[] = {107, 110, -1};
+        Vector *v91 = array_to_vector(arr91, 3);
+        pushBackVector(gr, *v91);
     }
     // Production 92: <definetypestmt> ===> TK_DEFINETYPE <A> TK_RUID TK_AS TK_RUID
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 108); // definetypestmt
-        pushBack(&prod, 47);  // TK_DEFINETYPE
-        pushBack(&prod, 109); // A
-        pushBack(&prod, 13);  // TK_RUID
-        pushBack(&prod, 48);  // TK_AS
-        pushBack(&prod, 13);  // TK_RUID
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr92[] = {108, 47, 109, 13, 48, 13, -1};
+        Vector *v92 = array_to_vector(arr92, 7);
+        pushBackVector(gr, *v92);
+        // printVector(v92);
     }
     // Production 93: <A> ===> TK_RECORD
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 109); // A
-        pushBack(&prod, 15);  // TK_RECORD
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr93[] = {109, 15, -1};
+        Vector *v93 = array_to_vector(arr93, 3);
+        pushBackVector(gr, *v93);
     }
     // Production 94: <A> ===> TK_UNION
     {
-        Vector prod;
-        initVector(&prod);
-        pushBack(&prod, 109); // A
-        pushBack(&prod, 17);  // TK_UNION
-        pushBack(&prod, -1);
-        pushBackVector(gr, prod);
+        int arr94[] = {109, 17, -1};
+        Vector *v94 = array_to_vector(arr94, 3);
+        pushBackVector(gr, *v94);
     }
+    // printVectorOfVector(gr);
 
-    grammar G = (grammar)malloc(sizeof(grammar));
+    grammar G = (grammar)malloc(sizeof(struct grammar));
     G->Grammar = (VectorOfVector *)malloc(sizeof(VectorOfVector));
     initVectorOfVector(G->Grammar);
-
+    // G->Grammar=gr;
     for (int i = 0; i < GRAMMAR_SIZE; i++) {
         Vector v;
-        initVector(&v);
+        initVector(&v);    
+        for (int j = 0; j < 10; j++) {
+            pushBack(&v, accessVectorOfVector(gr,i,j));
+            if (accessVectorOfVector(gr,i,j)== -1)
+                break;
+        }
     
-    for (int j = 0; j < 10; j++) {
-        pushBack(&v, accessVectorOfVector(gr,i,j));
-        if (accessVectorOfVector(gr,i,j)== -1)
-            break;
+        pushBackVector(G->Grammar, v);
     }
-    
-    pushBackVector(G->Grammar, v);
-}
 
-return G;
+    return G;
 
 }
 
@@ -1487,6 +923,9 @@ void parser_main(char *testcaseFile, char *outputFile)
     //     fclose(fp);
     //     printf("Code is syntactically incorrect so parse tree could not be constructed\n\n");
     // }
+        printf("Initializing grammar...\n");
+    grammar G = initialize_grammar();
+    print_grammar(G);
 }
 // TODO: Remove this main function before submitting the assignment.
 // this main function is just for testing the grammar initialization.
