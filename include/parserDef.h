@@ -1,8 +1,10 @@
 #include "vectorofvector.h"
 struct First_Follow
 {
-    int **firstset;
-    int **followset;
+    // int **firstset;
+    VectorOfVector firstset;
+    // int **followset;
+    VectorOfVector followset;
 };
 
 struct grammar
