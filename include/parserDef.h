@@ -1,9 +1,7 @@
 #include "vectorofvector.h"
 struct First_Follow
 {
-    // int **firstset;
     VectorOfVector firstset;
-    // int **followset;
     VectorOfVector followset;
 };
 
@@ -12,15 +10,22 @@ struct grammar
     VectorOfVector *Grammar;
 };
 
+struct pTable
+{
+    VectorOfVector parser_Table;
+};
+
+typedef struct pTable *parsetable;
 typedef struct grammar *grammar;
 typedef struct First_Follow *First_Follow;
 
 #define NONTERMINALS 53
-#define TERMINALS 57
+#define TERMINALS 56
 #define EPSILON 110
 #define TERMS_SIZE 111
 #define NONTERMINALS_START 57
 #define NONTERMINALS_END 110
+#define SYNCRO -2
 static char *grammarTerms[111] = {
 "$",                         // 0
 //terminals
@@ -134,6 +139,5 @@ static char *grammarTerms[111] = {
 "more_ids",                  // 107
 "definetypestmt",            // 108
 "A",                         // 109
-"eps"                        // 110
+"eps"                        // 110 terminal
 };
-

@@ -563,6 +563,134 @@ void freeFirstandFollow(First_Follow F)
     free(F);
 }
 
+parsetable initialize_table(First_Follow F)
+{
+    parsetable T = (parsetable)malloc(sizeof(struct pTable));
+    // Initialize the parser_Table as a vector of vector.
+    initVectorOfVector(&T->parser_Table);
+    
+    // For each non-terminal, create a row vector with (TERMINALS+1) entries initialized to -1.
+    for (int i = 0; i < NONTERMINALS; i++) {
+        Vector row;
+        initVector(&row);
+        for (int j = 0; j <= TERMINALS; j++) {
+            pushBack(&row, -1);
+        }
+        pushBackVector(&T->parser_Table, row);
+    }
+    
+    // Update the table using the followset.
+    // For each non-terminal row, iterate over the followset (stored as a vector)
+    // and set the corresponding entries to SYNCRO.
+    for (int i = 0; i < NONTERMINALS; i++) {
+        int follow_index = i + NONTERMINALS_START;
+        Vector *followRow = &F->followset.data[follow_index];
+        for (int j = 0; j < followRow->size; j++) {
+            int x = accessVector(followRow, j);
+            if (x == 0)
+                break;
+            if (x == -1)
+                T->parser_Table.data[i].data[0] = SYNCRO;  // position 0 represents '$'
+            else
+                T->parser_Table.data[i].data[x] = SYNCRO;
+        }
+    }
+    
+    // Set additional SYNCRO entries at fixed terminal indices.
+    for (int i = 0; i < NONTERMINALS; i++) {
+        Vector *row = &T->parser_Table.data[i];
+        row->data[4]  = SYNCRO;
+        row->data[18] = SYNCRO;
+        row->data[16] = SYNCRO;
+        row->data[29] = SYNCRO;
+        row->data[30] = SYNCRO;
+        row->data[9]  = SYNCRO;
+        row->data[2]  = SYNCRO;
+        row->data[26] = SYNCRO;
+        row->data[55] = SYNCRO;
+    }
+    
+    return T;
+}
+
+
+void createParseTable(First_Follow F, parsetable T, grammar G)
+{
+    int lhs, flag, flag2;
+    
+    // Process every production in the grammar.
+    for (int i = 0; i < GRAMMAR_SIZE; i++) {
+        lhs = accessVectorOfVector(G->Grammar, i, 0);
+        flag = 0;
+        for (int j = 1; j < 10; j++) {
+            flag2 = 0;
+            int rhs = accessVectorOfVector(G->Grammar, i, j);
+            if (rhs == -1)
+                break;
+            if (rhs == EPSILON) {
+                flag = 1;
+                break;
+            }
+            // If the right-hand side symbol is a terminal.
+            if (rhs >= 1 && rhs <= 56) {
+                T->parser_Table.data[lhs - NONTERMINALS_START].data[rhs] = i;
+                break;
+            }
+            
+            // Otherwise, for a non-terminal symbol on the right-hand side,
+            // iterate through its first set.
+            for (int k = 0; k < 20; k++) {
+                int first_val = accessVector(&F->firstset.data[rhs], k);
+                if (first_val == 0)
+                    break;
+                if (first_val != EPSILON) {
+                    T->parser_Table.data[lhs - NONTERMINALS_START].data[first_val] = i;
+                }
+                if (first_val == EPSILON)
+                    flag2 = 1;
+            }
+            if (flag2 == 0)
+                break;
+            else if (flag2 == 1 && accessVectorOfVector(G->Grammar, i, j + 1) == -1) {
+                flag = 1;
+                break;
+            }
+        }
+        // If at any point an EPSILON was derived,
+        // add entries based on the follow set of lhs.
+        if (flag == 1) {
+            Vector *followRow = &F->followset.data[lhs];
+            for (int j = 0; j < followRow->size; j++) {
+                int x = accessVector(followRow, j);
+                if (x == 0)
+                    break;
+                if (x == -1)
+                    T->parser_Table.data[lhs - NONTERMINALS_START].data[0] = i;
+                else
+                    T->parser_Table.data[lhs - NONTERMINALS_START].data[x] = i;
+            }
+        }
+    }
+}
+
+void printTable(parsetable T)
+{
+    for (int i = 0; i < NONTERMINALS; i++) {
+        printf("%s ==>", grammarTerms[i + NONTERMINALS_START]);
+        Vector *row = &T->parser_Table.data[i];
+        // Print every element of the row.
+        for (int j = 0; j < row->size; j++) {
+            int val = accessVector(row, j);
+            if (val == -1)
+                printf("_ ");
+            else if (val == SYNCRO)
+                printf("syn ");
+            else
+                printf("%d ", val);
+        }
+        printf("\n");
+    }
+}
 
 // Frees the memory allocated to the grammar
 void freeGrammar(grammar G)
@@ -1224,7 +1352,10 @@ void parser_main() {
     print_first_set(F, G);
     printf("hello this is testing of follow..\n");
     print_follow_set(F, G);
-    
+    printf("Initializing parse table...\n");
+    parsetable T = initialize_table(F);
+    createParseTable(F,T,G);
+    printTable(T);
     // printf("Initializing parse table...\n");
     // table T = initialize_table(F);
     // createParseTable(F, T);
