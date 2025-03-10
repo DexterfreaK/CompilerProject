@@ -1,166 +1,214 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "stack.h"
-#include "vectorofvector.h"
-static void ensure_deque_capacity(Deque *dq) {
-    if (dq->data.size < dq->data.capacity)
-        return;
+#include "tree.h"
+// Define the TreeNode structure
 
-    size_t oldCap = dq->data.capacity;
-    size_t newCap = oldCap * 2;
-    int *newArr = (int *)malloc(newCap * sizeof(int));
-    if (newArr == NULL) {
-        fprintf(stderr, "Memory allocation failed in ensure_deque_capacity\n");
+// Stack implementation for TreeNode pointers
+// Initialize a new stack with given capacity
+Token* createDummyToken(const char* lexeme) {
+    Token* token = malloc(sizeof(Token));
+    if (token == NULL) {
+        fprintf(stderr, "Memory allocation failed in createDummyToken\n");
         exit(EXIT_FAILURE);
     }
-    for (size_t i = 0; i < dq->data.size; i++) {
-        newArr[i] = dq->data.data[(dq->start + i) % oldCap];
+    // Copy the lexeme into the fixed-size array safely.
+    strncpy(token->lexeme, lexeme, BUFFER_SIZE);
+    token->lexeme[BUFFER_SIZE - 1] = '\0';  // Ensure null termination
+    // You can set default values for type, cat, and lineNo as needed.
+    token->type = 0;    // Default or dummy value
+    token->cat = 0;     // Default or dummy value
+    token->lineNo = 0;  // Default or dummy value
+    return token;
+}
+void createStack(Stack *stack, int capacity) {
+    stack->array = (TreeNode **)malloc(capacity * sizeof(TreeNode *));
+    if (stack->array == NULL) {
+        fprintf(stderr, "Memory allocation failed in createStack\n");
+        exit(EXIT_FAILURE);
     }
-    free(dq->data.data);
-    dq->data.data = newArr;
-    dq->data.capacity = newCap;
-    dq->start = 0;
+    stack->capacity = capacity;
+    stack->top = -1;  // Stack starts empty
 }
 
-/* ------------------ Deque Functions ------------------ */
+// Free the memory used by the stack
+void deleteStack(Stack *stack) {
+    free(stack->array);
+    stack->array = NULL;
+    stack->capacity = 0;
+    stack->top = -1;
+}
 
-void createDeque(Deque *dq, int capacity) {
-    initVector(&dq->data);
-    // If a larger capacity was requested, reallocate.
-    if ((size_t)capacity > dq->data.capacity) {
-        int *newArr = (int *)realloc(dq->data.data, capacity * sizeof(int));
-        if (newArr == NULL) {
-            fprintf(stderr, "Memory allocation failed in deque_init\n");
-            exit(EXIT_FAILURE);
+// Check if stack is full
+int isStackFull(const Stack *stack) {
+    return stack->top == stack->capacity - 1;
+}
+
+// Check if stack is empty
+int isStackEmpty(const Stack *stack) {
+    return stack->top == -1;
+}
+
+// Resize the stack to double its capacity
+void resizeStack(Stack *stack) {
+    int oldCapacity = stack->capacity;
+    int newCapacity = oldCapacity * 2;
+    TreeNode **newArray = (TreeNode **)realloc(stack->array, newCapacity * sizeof(TreeNode *));
+    if (newArray == NULL) {
+        fprintf(stderr, "Memory allocation failed in resizeStack\n");
+        exit(EXIT_FAILURE);
+    }
+    stack->array = newArray;
+    stack->capacity = newCapacity;
+    printf("Stack resized from %d to %d elements\n", oldCapacity, newCapacity);
+}
+
+// Push a TreeNode pointer onto the stack
+int pushStack(Stack *stack, TreeNode *node) {
+    if (isStackFull(stack)) {
+        resizeStack(stack);
+    }
+    stack->array[++stack->top] = node;
+    return 1;  // Success
+}
+
+// Pop a TreeNode pointer from the stack
+int popStack(Stack *stack, TreeNode **node) {
+    if (isStackEmpty(stack)) {
+        return 0;  // Failure, stack is empty
+    }
+    *node = stack->array[stack->top--];
+    return 1;  // Success
+}
+
+// Get the top TreeNode pointer without removing it
+int topStack(Stack *stack, TreeNode **node) {
+    if (isStackEmpty(stack)) {
+        return 0;  // Failure, stack is empty
+    }
+    *node = stack->array[stack->top];
+    return 1;  // Success
+}
+
+// Print the stack (for debugging)
+// For nonterminal nodes, prints the symbolID; for terminal nodes, prints the token's lexeme.
+void printStack(const Stack *stack) {
+    printf("Stack contents (top to bottom):\n");
+    for (int i = stack->top; i >= 0; i--) {
+        TreeNode *node = stack->array[i];
+        if (node->nodeType == NODE_TYPE_TERMINAL) {
+            char* tokenStr = (node->content.terminal.token && node->content.terminal.token->lexeme)
+                                ? node->content.terminal.token->lexeme : "NULL";
+            printf("[%d]: %p (Type: TERMINAL, Token: %s)\n", i, (void*)node, tokenStr);
+        } else {
+            printf("[%d]: %p (Type: NONTERMINAL, SymbolID: %d)\n", i, (void*)node, node->content.nonterminal.symbolID);
         }
-        dq->data.data = newArr;
-        dq->data.capacity = capacity;
     }
-    dq->data.size = 0;
-    dq->start = 0;
+    printf("Stack capacity: %d, Used: %d\n", stack->capacity, stack->top + 1);
 }
 
-void deleteDeque(Deque *dq) {
-    freeVector(&dq->data);
-}
 
-int pushFront(Deque *dq, int value) {
-    ensure_deque_capacity(dq);
-    dq->start = (dq->start + dq->data.capacity - 1) % dq->data.capacity;
-    dq->data.data[dq->start] = value;
-    dq->data.size++;
-    return 1;
-}
+// ----- Main function to test the stack implementation -----
 
-int pushBackDeque(Deque *dq, int value) {
-    ensure_deque_capacity(dq);
-    size_t pos = (dq->start + dq->data.size) % dq->data.capacity;
-    dq->data.data[pos] = value;
-    dq->data.size++;
-    return 1;
-}
+// int stack_main() {
+//     Stack nodeStack;
+//     TreeNode *poppedNode;
+//     int initialCapacity = 3;  // Small initial capacity to test resizing
 
-int popFront(Deque *dq, int *value) {
-    if (dq->data.size == 0)
-        return 0;  // The deque is empty.
-    *value = dq->data.data[dq->start];
-    dq->start = (dq->start + 1) % dq->data.capacity;
-    dq->data.size--;
-    return 1;
-}
-
-int popRear(Deque *dq, int *value) {
-    if (dq->data.size == 0)
-        return 0;  // The deque is empty.
-    size_t pos = (dq->start + dq->data.size - 1) % dq->data.capacity;
-    *value = dq->data.data[pos];
-    dq->data.size--;
-    return 1;
-}
-
-int first(Deque *dq, int *value) {
-    if (dq->data.size == 0)
-        return 0;
-    *value = dq->data.data[dq->start];
-    return 1;
-}
-
-int rear(Deque *dq, int *value) {
-    if (dq->data.size == 0)
-        return 0;
-    size_t pos = (dq->start + dq->data.size - 1) % dq->data.capacity;
-    *value = dq->data.data[pos];
-    return 1;
-}
-
-void dequeprint(const Deque *dq) {
-    for (size_t i = 0; i < dq->data.size; i++) {
-        printf("%d ", dq->data.data[(dq->start + i) % dq->data.capacity]);
-    }
-    printf("\n");
-}
-
-/* ------------------ Stack Functions ------------------ */
-
-void createStack(Stack *s, int capacity) {
-    createDeque(&s->dq, capacity);
-}
-
-void deleteStack(Stack *s) {
-    deleteDeque(&s->dq);
-}
-
-int pushStack(Stack *s, int value) {
-    return pushBackDeque(&s->dq, value);
-}
-
-int popStack(Stack *s, int *value) {
-    return popRear(&s->dq, value);
-}
-
-int topStack(Stack *s, int *value) {
-    return rear(&s->dq, value);
-}
-
-int isStackEmpty(const Stack *s) {
-    return (s->dq.data.size == 0);
-}
-//TODO: Remove this main function before submitting the assignment.
-// this main function is just for testing the stack implementation.
-void stack_main() {
-    Stack myStack;
-    int item;
-    int initialCapacity = 4;  // Start with a capacity of 4
-
-    createStack(&myStack, initialCapacity);
-
-    // Push some items onto the stack
-    pushStack(&myStack, 100);
-    pushStack(&myStack, 200);
-    pushStack(&myStack, 300);
-    pushStack(&myStack, 400);
-
-    // Peek at the top item
-    if (topStack(&myStack, &item))
-        printf("Top of stack: %d\n", item);
-    popStack(&myStack, &item);
-        printf("Popped: %d\n", item);
-    // Peek at the top item
-    if (topStack(&myStack, &item))
-        printf("Top of stack: %d\n", item);
-    popStack(&myStack, &item);
-        printf("Popped: %d\n", item);
-    // Peek at the top item
-    if (topStack(&myStack, &item))
-        printf("Top of stack: %d\n", item);
-    popStack(&myStack, &item);
-        printf("Popped: %d\n", item);
-    // Peek at the top item
-    if (topStack(&myStack, &item))
-        printf("Top of stack: %d\n", item);
-    popStack(&myStack, &item);
-        printf("Popped: %d\n", item);
-
-    deleteStack(&myStack);
-    return 0;
-}
+//     printf("=== TreeNode Stack Test Program ===\n\n");
+    
+//     // Create the stack
+//     createStack(&nodeStack, initialCapacity);
+//     printf("Created stack with initial capacity: %d\n\n", initialCapacity);
+    
+//     // Create some TreeNodes according to the new tree definition.
+//     // For nonterminal nodes we use createNonTerminalNode(symbolID, numChildren)
+//     // For terminal nodes we use createTerminalNode(Token*) with a dummy token.
+//     TreeNode* root = createNonTerminalNode(1, 2);   // symbolID 1, assume 2 children
+//     TreeNode* child1 = createNonTerminalNode(2, 2);   // symbolID 2, assume 2 children
+//     TreeNode* child2 = createNonTerminalNode(3, 0);   // symbolID 3, leaf nonterminal (no children)
+//     TreeNode* leaf1 = createTerminalNode(createDummyToken("Leaf1"));
+//     TreeNode* leaf2 = createTerminalNode(createDummyToken("Leaf2"));
+    
+//     // Optionally set parent pointers (if needed for your tree)
+//     child1->parent = root;
+//     child2->parent = root;
+//     leaf1->parent = child1;
+//     leaf2->parent = child1;
+    
+//     // Push nodes onto the stack
+//     printf("Pushing nodes onto stack...\n");
+//     pushStack(&nodeStack, root);
+//     printf("Pushed root node: %p (SymbolID: %d)\n", (void*)root, root->content.nonterminal.symbolID);
+    
+//     pushStack(&nodeStack, child1);
+//     printf("Pushed child1 node: %p (SymbolID: %d)\n", (void*)child1, child1->content.nonterminal.symbolID);
+    
+//     pushStack(&nodeStack, child2);
+//     printf("Pushed child2 node: %p (SymbolID: %d)\n", (void*)child2, child2->content.nonterminal.symbolID);
+    
+//     // This should trigger resizing
+//     pushStack(&nodeStack, leaf1);
+//     printf("Pushed leaf1 node: %p (Token: %s)\n", (void*)leaf1, leaf1->content.terminal.token->lexeme);
+    
+//     pushStack(&nodeStack, leaf2);
+//     printf("Pushed leaf2 node: %p (Token: %s)\n\n", (void*)leaf2, leaf2->content.terminal.token->lexeme);
+    
+//     // Print stack contents
+//     printf("Current stack state:\n");
+//     printStack(&nodeStack);
+//     printf("\n");
+    
+//     // Test peek (top) operation
+//     if (topStack(&nodeStack, &poppedNode)) {
+//         if (poppedNode->nodeType == NODE_TYPE_TERMINAL) {
+//             char* tokenStr = (poppedNode->content.terminal.token && poppedNode->content.terminal.token->lexeme)
+//                                 ? poppedNode->content.terminal.token->lexeme : "NULL";
+//             printf("Top node without popping: %p (Type: TERMINAL, Token: %s)\n\n", (void*)poppedNode, tokenStr);
+//         } else {
+//             printf("Top node without popping: %p (Type: NONTERMINAL, SymbolID: %d)\n\n",
+//                    (void*)poppedNode, poppedNode->content.nonterminal.symbolID);
+//         }
+//     }
+    
+//     // Pop and process nodes
+//     printf("Popping and processing nodes...\n");
+//     while (popStack(&nodeStack, &poppedNode)) {
+//         if (poppedNode->nodeType == NODE_TYPE_TERMINAL) {
+//             char* tokenStr = (poppedNode->content.terminal.token && poppedNode->content.terminal.token->lexeme)
+//                                 ? poppedNode->content.terminal.token->lexeme : "NULL";
+//             printf("Popped node: %p (Type: TERMINAL, Token: %s)\n", (void*)poppedNode, tokenStr);
+//         } else {
+//             printf("Popped node: %p (Type: NONTERMINAL, SymbolID: %d)\n", (void*)poppedNode, poppedNode->content.nonterminal.symbolID);
+//         }
+//     }
+//     printf("\n");
+    
+//     // Check empty stack
+//     printf("Stack after popping all elements:\n");
+//     printStack(&nodeStack);
+//     printf("\n");
+    
+//     // Test empty stack operations
+//     if (!popStack(&nodeStack, &poppedNode)) {
+//         printf("Pop on empty stack correctly returned failure\n");
+//     }
+    
+//     if (!topStack(&nodeStack, &poppedNode)) {
+//         printf("Top on empty stack correctly returned failure\n");
+//     }
+    
+//     // Free memory: first delete the stack, then free each node.
+//     // Note: In an actual syntax tree the nodes would be freed via a recursive tree-freeing function.
+//     printf("\nCleaning up resources...\n");
+//     // deleteStack(&nodeStack);
+//     // freeTreeNode(root);
+//     // freeTreeNode(child1);
+//     // freeTreeNode(child2);
+//     // freeTreeNode(leaf1);
+//     // freeTreeNode(leaf2);
+    
+//     printf("\n=== Test completed successfully ===\n");
+    
+//     return 0;
+// }

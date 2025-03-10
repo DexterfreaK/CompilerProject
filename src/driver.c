@@ -32,9 +32,9 @@ int main(int argc, char **argv)
             driverToken(argv[1]);
             break;
         case 3:
-            parser_main();
+            // parser_main();
             //uncomment to check stack implementation
-            //stack_main();
+            stack_main();
             break;
         case 4:
         {
